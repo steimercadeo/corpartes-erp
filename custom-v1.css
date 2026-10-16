@@ -1,0 +1,21 @@
+/* CORPARTES · Organización V1 */
+#module-pedidos .card-heading-row{align-items:flex-end!important}
+#v742OrderFilters{margin-top:14px!important}
+.v742-order-filter-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important;align-items:end!important}
+.v742-order-filter-grid .v742-field{min-width:0!important}
+.v742-order-filter-grid input,.v742-order-filter-grid select{width:100%!important;box-sizing:border-box!important}
+#v742OrderClear{width:100%!important;align-self:end!important;margin:0!important}
+#orders-tab-pedidos>article.card.top-space>.table-wrap{max-height:560px!important;overflow:auto!important;border:1px solid #e2e8f0!important;border-radius:14px!important}
+#orders-tab-pedidos>article.card.top-space>.table-wrap thead th{position:sticky!important;top:0!important;z-index:2!important;background:#f8fafc!important}
+#orders-tab-pedidos>article.card.top-space>.table-wrap tbody tr{height:48px}
+#orders-tab-reprocesos>.grid.two-columns{display:grid!important;grid-template-columns:minmax(0,1.25fr) minmax(320px,.75fr)!important;gap:18px!important;align-items:start!important}
+#orders-tab-reprocesos .reprocess-card{margin:0!important}
+#orders-tab-reprocesos .process-check-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important}
+#orders-tab-reprocesos .reprocess-add-row{display:grid!important;grid-template-columns:minmax(240px,1fr) 180px 180px!important;gap:12px!important;align-items:end!important}
+#orders-tab-reprocesos .reprocess-items-wrap{max-height:300px!important;overflow:auto!important;border:1px solid #e2e8f0!important;border-radius:12px!important}
+#orders-tab-reprocesos .reprocess-items-wrap thead th{position:sticky!important;top:0!important;background:#f8fafc!important;z-index:2!important}
+#orders-tab-reprocesos article.card:not(.reprocess-card) .table-wrap{max-height:520px!important;overflow:auto!important;border:1px solid #e2e8f0!important;border-radius:14px!important}
+#orders-tab-reprocesos article.card:not(.reprocess-card) .table-wrap thead th{position:sticky!important;top:0!important;background:#f8fafc!important;z-index:2!important}
+.cp-section-note{font-size:12px;color:#64748b;margin:6px 0 0}
+@media(max-width:1180px){.v742-order-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#orders-tab-reprocesos>.grid.two-columns{grid-template-columns:1fr!important}}
+@media(max-width:700px){.v742-order-filter-grid{grid-template-columns:1fr!important}#orders-tab-reprocesos .process-check-grid{grid-template-columns:1fr 1fr!important}#orders-tab-reprocesos .reprocess-add-row{grid-template-columns:1fr!important}}
