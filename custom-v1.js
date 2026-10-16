@@ -115,5 +115,31 @@ function setLibraryGroupState(group,isOpen){
   header.setAttribute('aria-expanded',isOpen?'true':'false');
   grid.style.display=isOpen?'grid':'none';
 }
-ready(()=>{enhance();const mo=new MutationObserver(enhance);mo.observe(document.body,{childList:true,subtree:true});});
+function syncLoginLayer(){
+  const login=document.getElementById('loginView');
+  const app=document.getElementById('appView');
+  if(!login||!app)return;
+  const appVisible=!app.classList.contains('hidden');
+  if(appVisible){
+    login.classList.add('hidden');
+    login.style.display='none';
+    login.style.visibility='hidden';
+    login.style.pointerEvents='none';
+    login.setAttribute('aria-hidden','true');
+    app.style.pointerEvents='auto';
+  }else{
+    login.style.removeProperty('display');
+    login.style.removeProperty('visibility');
+    login.style.removeProperty('pointer-events');
+    login.removeAttribute('aria-hidden');
+  }
+}
+ready(()=>{
+  enhance();
+  syncLoginLayer();
+  const mo=new MutationObserver(()=>{enhance();syncLoginLayer();});
+  mo.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+  document.addEventListener('click',()=>setTimeout(syncLoginLayer,0),true);
+  setInterval(syncLoginLayer,750);
+});
 })();
