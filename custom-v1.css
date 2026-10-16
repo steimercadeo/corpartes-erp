@@ -19,3 +19,32 @@
 .cp-section-note{font-size:12px;color:#64748b;margin:6px 0 0}
 @media(max-width:1180px){.v742-order-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#orders-tab-reprocesos>.grid.two-columns{grid-template-columns:1fr!important}}
 @media(max-width:700px){.v742-order-filter-grid{grid-template-columns:1fr!important}#orders-tab-reprocesos .process-check-grid{grid-template-columns:1fr 1fr!important}#orders-tab-reprocesos .reprocess-add-row{grid-template-columns:1fr!important}}
+
+/* CORPARTES · Organización V2 */
+#orders-tab-reprocesos .cp-reprocess-process-box{background:linear-gradient(180deg,#f8fbff 0%,#ffffff 100%)!important;border:1px solid #cfe1ff!important;border-radius:22px!important;padding:18px!important;box-shadow:0 8px 22px rgba(37,99,235,.06)!important}
+#orders-tab-reprocesos .cp-reprocess-process-box>label{display:block;font-size:15px;font-weight:900;color:#173f70;margin-bottom:8px}
+#orders-tab-reprocesos .cp-reprocess-process-box>small{display:block;margin-top:10px;line-height:1.45;color:#64748b}
+#orders-tab-reprocesos #reprocessProcessChecks{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:14px!important;margin-top:10px}
+#orders-tab-reprocesos #reprocessProcessChecks label{display:flex!important;align-items:center!important;gap:14px!important;min-height:86px!important;padding:16px 18px!important;border:1px solid #dbeafe!important;border-radius:18px!important;background:#fff!important;box-shadow:0 8px 20px rgba(15,23,42,.04)!important;cursor:pointer!important;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease,background .16s ease}
+#orders-tab-reprocesos #reprocessProcessChecks label:hover{transform:translateY(-1px);border-color:#93c5fd!important;box-shadow:0 12px 28px rgba(37,99,235,.10)!important}
+#orders-tab-reprocesos #reprocessProcessChecks label.cp-active{background:#eff6ff!important;border-color:#60a5fa!important;box-shadow:0 14px 32px rgba(37,99,235,.14)!important}
+#orders-tab-reprocesos #reprocessProcessChecks input{appearance:none!important;-webkit-appearance:none!important;width:26px!important;height:26px!important;border:2px solid #94a3b8!important;border-radius:8px!important;background:#fff!important;margin:0!important;display:grid!important;place-items:center!important;flex:0 0 auto;position:relative;transition:border-color .16s ease,background .16s ease}
+#orders-tab-reprocesos #reprocessProcessChecks input:checked{background:#2563eb!important;border-color:#2563eb!important}
+#orders-tab-reprocesos #reprocessProcessChecks input:checked::after{content:"✓";color:#fff;font-size:15px;font-weight:900;line-height:1}
+#orders-tab-reprocesos #reprocessProcessChecks .chip{display:inline-flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;min-height:44px!important;border-radius:999px!important;padding:10px 16px!important;font-size:14px!important;font-weight:900!important;color:#fff!important;box-shadow:inset 0 -2px 0 rgba(255,255,255,.18),0 8px 18px rgba(15,23,42,.10)!important;line-height:1.2!important}
+#orders-tab-reprocesos #reprocessProcessChecks .chip span{display:block}
+#orders-tab-reprocesos .reprocess-builder{border:1px solid #dbeafe!important;border-radius:18px!important;padding:16px!important;background:#fff}
+#orders-tab-biblioteca #v801ProductsBody{display:grid!important;gap:14px!important}
+#orders-tab-biblioteca .v801-product-group{border:1px solid #bfdbfe!important;border-radius:18px!important;overflow:hidden!important;background:#fff!important;box-shadow:0 10px 22px rgba(15,23,42,.05)!important}
+#orders-tab-biblioteca .v801-product-group-header{cursor:pointer!important;position:relative!important}
+#orders-tab-biblioteca .v801-product-group-header[role="button"]{outline:none}
+#orders-tab-biblioteca .v801-product-group-header[role="button"]:focus-visible{box-shadow:inset 0 0 0 3px rgba(255,255,255,.65)}
+#orders-tab-biblioteca .v801-product-card-grid{display:none!important;padding:16px!important;background:#f8fbff!important;border-top:1px solid #dbeafe!important}
+#orders-tab-biblioteca .v801-product-group.cp-open .v801-product-card-grid{display:grid!important}
+#orders-tab-biblioteca .v801-product-group.cp-open{box-shadow:0 18px 38px rgba(37,99,235,.14)!important;border-color:#93c5fd!important}
+#orders-tab-biblioteca .cp-library-chevron{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:999px;background:rgba(255,255,255,.18);color:#fff;font-size:18px;font-weight:900;transition:transform .18s ease,background .18s ease;flex:0 0 auto}
+#orders-tab-biblioteca .v801-product-group.cp-open .cp-library-chevron{transform:rotate(180deg);background:rgba(255,255,255,.26)}
+#orders-tab-biblioteca .cp-library-guide{margin:10px 0 14px;padding:12px 14px;border-radius:14px;background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;font-size:13px;line-height:1.5}
+#orders-tab-biblioteca .cp-library-guide strong{display:block;margin-bottom:2px}
+@media(max-width:900px){#orders-tab-reprocesos #reprocessProcessChecks{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:700px){#orders-tab-reprocesos #reprocessProcessChecks{grid-template-columns:1fr!important}}
