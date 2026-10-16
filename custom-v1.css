@@ -48,3 +48,18 @@
 #orders-tab-biblioteca .cp-library-guide strong{display:block;margin-bottom:2px}
 @media(max-width:900px){#orders-tab-reprocesos #reprocessProcessChecks{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:700px){#orders-tab-reprocesos #reprocessProcessChecks{grid-template-columns:1fr!important}}
+
+/* CORPARTES · Fix de interacción/login */
+#loginView.hidden{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+  z-index:-1!important;
+}
+#appView:not(.hidden){
+  position:relative!important;
+  z-index:1!important;
+  pointer-events:auto!important;
+}
+#appView:not(.hidden) *{pointer-events:auto;}
