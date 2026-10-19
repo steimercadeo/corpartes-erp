@@ -6123,6 +6123,133 @@ function openOptimizedPrintWindow({title="Informe ESS",html="",landscape=true}){
 <!-- ESS V2.5.4C - PROGRAMACION_ID GLOBAL -->
 
 <!-- ESS V2.5.4D - RETIRAR BOTON PROCESOS LISTADO -->
+
+<!-- CORPARTES · REMISIONES ORGANIZACION V2 · 20261019 -->
+<style id="cp-remisiones-v2-style">
+#module-remisiones .v19-rem-header{align-items:center!important;margin-bottom:16px!important}
+#module-remisiones .v19-rem-title h1{font-size:28px!important;color:#123a5a!important}
+#module-remisiones .v19-rem-subtitle{font-size:13px!important;color:#64748b!important}
+#module-remisiones .v19-rem-card{border-radius:20px!important;padding:20px!important;box-shadow:0 10px 30px rgba(15,23,42,.06)!important}
+#module-remisiones .v19-rem-toolbar{display:grid!important;grid-template-columns:repeat(4,minmax(150px,1fr))!important;gap:12px!important;align-items:end!important;padding:16px!important;margin-bottom:16px!important;background:#f8fafc!important;border:1px solid #e2e8f0!important;border-radius:16px!important}
+#module-remisiones .v19-rem-field label{font-size:11px!important;text-transform:uppercase!important;letter-spacing:.04em!important;color:#64748b!important}
+#module-remisiones .v19-rem-toolbar input,#module-remisiones .v19-rem-toolbar select{min-height:42px!important;border-radius:10px!important}
+#module-remisiones #v19ClearFilters{min-height:42px!important;margin:0!important;align-self:end!important}
+#module-remisiones .v19-rem-table-wrap{max-height:560px!important;overflow:auto!important;border:1px solid #e2e8f0!important;border-radius:16px!important;background:#fff!important}
+#module-remisiones .v19-rem-table{min-width:900px!important}
+#module-remisiones .v19-rem-table thead th{position:sticky!important;top:0!important;z-index:3!important;background:#f1f5f9!important;color:#334155!important;padding:12px!important;font-size:11px!important;text-transform:uppercase!important;letter-spacing:.035em!important}
+#module-remisiones .v19-rem-table td{padding:12px!important;vertical-align:middle!important;font-size:12px!important}
+#module-remisiones .cp-rem-number{font-size:14px!important;color:#0f3f62!important}
+#module-remisiones .cp-rem-client{font-weight:800!important;color:#0f172a!important}
+#module-remisiones .cp-rem-status{display:inline-flex!important;align-items:center!important;padding:6px 10px!important;border-radius:999px!important;font-size:11px!important;font-weight:900!important;white-space:nowrap!important}
+#module-remisiones .cp-rem-status.ok{background:#dcfce7!important;color:#166534!important}
+#module-remisiones .cp-rem-status.pending{background:#fff7ed!important;color:#9a3412!important}
+#module-remisiones .cp-rem-support{font-size:11px!important;font-weight:800!important;color:#475569!important}
+#module-remisiones .cp-rem-detail-toggle{white-space:nowrap!important}
+#module-remisiones .cp-rem-detail-row.hidden{display:none!important}
+#module-remisiones .cp-rem-detail-row td{background:#f8fbff!important;padding:0!important;border-bottom:2px solid #dbeafe!important}
+#module-remisiones .cp-rem-detail-panel{padding:18px!important;display:grid!important;gap:16px!important}
+#module-remisiones .cp-rem-detail-head{display:flex!important;justify-content:space-between!important;align-items:flex-start!important;gap:16px!important;flex-wrap:wrap!important}
+#module-remisiones .cp-rem-detail-title{display:flex!important;flex-direction:column!important;gap:3px!important}
+#module-remisiones .cp-rem-detail-title strong{font-size:15px!important;color:#173f70!important}
+#module-remisiones .cp-rem-meta{display:flex!important;gap:8px!important;flex-wrap:wrap!important}
+#module-remisiones .cp-rem-meta span{background:#fff!important;border:1px solid #dbeafe!important;border-radius:999px!important;padding:5px 9px!important;font-size:11px!important;color:#475569!important}
+#module-remisiones .cp-rem-items{overflow:auto!important;border:1px solid #dbeafe!important;border-radius:12px!important;background:#fff!important;max-height:260px!important}
+#module-remisiones .cp-rem-items table{width:100%!important;border-collapse:collapse!important}
+#module-remisiones .cp-rem-items th,#module-remisiones .cp-rem-items td{padding:9px 10px!important;border-bottom:1px solid #eef2f7!important;text-align:left!important;font-size:11px!important}
+#module-remisiones .cp-rem-items th{position:sticky!important;top:0!important;background:#f8fafc!important;color:#64748b!important;text-transform:uppercase!important;font-size:10px!important}
+#module-remisiones .cp-rem-detail-actions{display:flex!important;gap:7px!important;flex-wrap:wrap!important;padding-top:2px!important}
+#module-remisiones .cp-rem-result-count{font-size:12px!important;color:#64748b!important;margin:0 0 10px!important;text-align:right!important}
+@media(max-width:1100px){#module-remisiones .v19-rem-toolbar{grid-template-columns:repeat(2,minmax(150px,1fr))!important}}
+@media(max-width:650px){#module-remisiones .v19-rem-toolbar{grid-template-columns:1fr!important}}
+</style>
+<script id="cp-remisiones-v2-script">
+(function(){
+"use strict";
+let applying=false, scheduled=false;
+const esc=v=>String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const appState=()=>typeof state!=="undefined"?state:window.state;
+const getRecord=id=>(appState()?.data?.remissions||[]).find(r=>String(r.id)===String(id));
+const fmt=v=>{try{return v?new Date(v).toLocaleDateString("es-CO"):"-"}catch(_e){return String(v||"-")}};
+
+function ensureFilters(){
+ const toolbar=document.querySelector("#module-remisiones .v19-rem-toolbar"); if(!toolbar)return false;
+ if(!document.getElementById("cpRemNumberFilter")){
+   const f=document.createElement("div"); f.className="v19-rem-field";
+   f.innerHTML='<label>Número de remisión</label><input id="cpRemNumberFilter" placeholder="Ej. 1025" autocomplete="off">';
+   toolbar.insertBefore(f,toolbar.firstChild);
+   f.querySelector("input").addEventListener("input",schedule);
+ }
+ if(!document.getElementById("cpRemStatusFilter")){
+   const f=document.createElement("div"); f.className="v19-rem-field";
+   f.innerHTML='<label>Estado</label><select id="cpRemStatusFilter"><option value="">Todos los estados</option><option value="support">Con soporte</option><option value="pending">Pendiente soporte</option></select>';
+   const clear=document.getElementById("v19ClearFilters"); toolbar.insertBefore(f,clear||null);
+   f.querySelector("select").addEventListener("change",schedule);
+ }
+ const clear=document.getElementById("v19ClearFilters");
+ if(clear&&!clear.dataset.cpRemBound){
+   clear.dataset.cpRemBound="1";
+   clear.addEventListener("click",()=>{const a=document.getElementById("cpRemNumberFilter");if(a)a.value="";const b=document.getElementById("cpRemStatusFilter");if(b)b.value="";setTimeout(schedule,0)});
+ }
+ return true;
+}
+function header(){
+ const h=document.querySelector("#module-remisiones .v19-rem-table thead tr"); if(!h)return;
+ if(h.dataset.cpRemV2==="1")return;
+ h.dataset.cpRemV2="1";
+ h.innerHTML="<th>Remisión</th><th>Cliente</th><th>Pedido</th><th>Fecha</th><th>Estado</th><th>Soporte</th><th>Detalle</th>";
+}
+function rowId(row){
+ const b=row.querySelector("[data-v19-print],[data-v19-edit],[data-v193-support],[data-v19-delete],[data-v819-world-office],[data-vwo-support]");
+ if(!b)return "";
+ return b.dataset.v19Print||b.dataset.v19Edit||b.dataset.v193Support||b.dataset.v19Delete||b.dataset.v819WorldOffice||b.dataset.vwoSupport||"";
+}
+function details(r,actions){
+ const items=r.items||[];
+ const rows=items.map((x,i)=>'<tr><td>'+(i+1)+'</td><td><strong>'+esc(x.code||x.reference||"-")+'</strong></td><td>'+esc(x.description||x.name||"-")+'</td><td>'+Number(x.qty||0).toLocaleString("es-CO")+'</td><td>'+esc(x.note||x.observation||x.color||"-")+'</td></tr>').join("")||'<tr><td colspan="5">Sin ítems registrados.</td></tr>';
+ const units=items.reduce((s,x)=>s+Number(x.qty||0),0);
+ return '<div class="cp-rem-detail-panel"><div class="cp-rem-detail-head"><div class="cp-rem-detail-title"><strong>Remisión '+esc(r.number||"-")+' · Pedido '+esc(r.orderNumber||"-")+'</strong><span>'+esc(r.client||"-")+'</span></div><div class="cp-rem-meta"><span>'+items.length+' ítem(s)</span><span>'+units.toLocaleString("es-CO")+' unidades</span><span>Creada por '+esc(r.createdByName||r.createdByCode||"-")+'</span><span>'+(r.updatedAt?"Modificada "+esc(fmt(r.updatedAt)):"Sin modificaciones")+'</span></div></div><div class="cp-rem-items"><table><thead><tr><th>#</th><th>Código</th><th>Descripción</th><th>Cantidad</th><th>Observación</th></tr></thead><tbody>'+rows+'</tbody></table></div><div class="cp-rem-detail-actions">'+actions+'</div></div>';
+}
+function count(n){
+ const wrap=document.querySelector("#module-remisiones .v19-rem-table-wrap"); if(!wrap)return;
+ let x=document.getElementById("cpRemResultCount");
+ if(!x){x=document.createElement("div");x.id="cpRemResultCount";x.className="cp-rem-result-count";wrap.before(x)}
+ x.textContent=n+" remisión"+(n===1?"":"es")+" visible"+(n===1?"":"s");
+}
+function compact(){
+ const body=document.getElementById("v19HistoryBody"); if(!body)return;
+ const source=[...body.children].filter(r=>!r.classList.contains("cp-rem-detail-row"));
+ if(source.length===1&&source[0].querySelector(".v19-rem-empty")){source[0].querySelector("td")?.setAttribute("colspan","7");count(0);return}
+ const pairs=[];
+ source.forEach(row=>{
+   if(row.dataset.cpRemV2==="1"){const d=row.nextElementSibling?.classList.contains("cp-rem-detail-row")?row.nextElementSibling:null;pairs.push({row,detail:d,id:row.dataset.cpRemId||""});return}
+   const id=rowId(row),r=getRecord(id); if(!id||!r)return;
+   const actions=row.querySelector(".v19-rem-actions")?.innerHTML||"";
+   row.dataset.cpRemV2="1"; row.dataset.cpRemId=id; row.className="cp-rem-summary-row";
+   const supported=!!r.receiptSupport?.id;
+   row.innerHTML='<td><strong class="cp-rem-number">'+esc(r.number||"-")+'</strong></td><td class="cp-rem-client">'+esc(r.client||"-")+'</td><td><strong>'+esc(r.orderNumber||"-")+'</strong></td><td>'+esc(fmt(r.date))+'</td><td><span class="cp-rem-status '+(supported?"ok":"pending")+'">'+(supported?"Con soporte":"Pendiente soporte")+'</span></td><td><span class="cp-rem-support">'+(supported?"Firmado ✓":"Sin soporte")+'</span></td><td><button type="button" class="button secondary small cp-rem-detail-toggle" data-cp-rem-detail-toggle="'+esc(id)+'">Ver detalle</button></td>';
+   const d=document.createElement("tr"); d.className="cp-rem-detail-row hidden"; d.dataset.cpRemDetail=id; d.innerHTML='<td colspan="7">'+details(r,actions)+'</td>'; row.after(d);
+   pairs.push({row,detail:d,id});
+ });
+ pairs.sort((a,b)=>String(getRecord(b.id)?.number||"").localeCompare(String(getRecord(a.id)?.number||""),"es",{numeric:true,sensitivity:"base"}));
+ pairs.forEach(p=>{body.appendChild(p.row);if(p.detail)body.appendChild(p.detail)});
+ filter(pairs);
+}
+function filter(pairs){
+ const n=String(document.getElementById("cpRemNumberFilter")?.value||"").trim().toLowerCase();
+ const s=document.getElementById("cpRemStatusFilter")?.value||""; let visible=0;
+ pairs.forEach(p=>{const r=getRecord(p.id);if(!r)return;let show=true;if(n&&!String(r.number||"").toLowerCase().includes(n))show=false;if(s==="support"&&!r.receiptSupport?.id)show=false;if(s==="pending"&&r.receiptSupport?.id)show=false;p.row.style.display=show?"":"none";if(p.detail){if(!show)p.detail.classList.add("hidden");p.detail.style.display=show?"":"none"}if(show)visible++});
+ count(visible);
+}
+function apply(){if(applying)return;applying=true;try{if(!ensureFilters())return;header();compact()}finally{applying=false}}
+function schedule(){if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;apply()})}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-cp-rem-detail-toggle]");if(!b)return;const id=b.dataset.cpRemDetailToggle;const row=[...document.querySelectorAll("#v19HistoryBody .cp-rem-detail-row")].find(x=>x.dataset.cpRemDetail===id);if(!row)return;const open=row.classList.contains("hidden");document.querySelectorAll("#v19HistoryBody .cp-rem-detail-row").forEach(x=>x.classList.add("hidden"));document.querySelectorAll("#v19HistoryBody [data-cp-rem-detail-toggle]").forEach(x=>x.textContent="Ver detalle");if(open){row.classList.remove("hidden");b.textContent="Ocultar detalle"}},true);
+const mo=new MutationObserver(m=>{if(!applying&&m.some(x=>x.type==="childList"))schedule()});
+const start=()=>{mo.observe(document.documentElement,{childList:true,subtree:true});schedule();setTimeout(schedule,300);setTimeout(schedule,1200)};
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start,{once:true});else start();
+})();
+</script>
+<!-- FIN CORPARTES · REMISIONES ORGANIZACION V2 -->
+
 </body></html>`);
   w.document.close();
   waitForPrintAssets(w.document).finally(()=>{
