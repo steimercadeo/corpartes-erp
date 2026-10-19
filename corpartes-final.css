@@ -214,3 +214,47 @@
   scrollbar-width:thin!important;
   scrollbar-color:#94a3b8 #eef2f7!important;
 }
+
+
+/* PEDIDOS FILTRO AVANCE DENTRO DE MARGEN V3 */
+#v742OrderFilters .v742-order-filter-grid{
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  align-items:end!important;
+}
+#v742OrderFilters .v742-field{
+  min-width:0!important;
+}
+#v742OrderFilters .v742-field input,
+#v742OrderFilters .v742-field select,
+#v742OrderFilters #orderSearch{
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  min-width:0!important;
+}
+#v742OrderFilters .v742-field:last-of-type,
+#v742OrderFilters .v742-field:has(#orderProgressFilter),
+#v742OrderFilters .v742-field:has(#orderAdvanceFilter){
+  grid-column:auto!important;
+  width:auto!important;
+  max-width:none!important;
+}
+#v742OrderFilters select{
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+@media(max-width:1200px){
+  #v742OrderFilters .v742-order-filter-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+}
+@media(max-width:900px){
+  #v742OrderFilters .v742-order-filter-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+@media(max-width:620px){
+  #v742OrderFilters .v742-order-filter-grid{
+    grid-template-columns:1fr!important;
+  }
+}
