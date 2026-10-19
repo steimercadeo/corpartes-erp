@@ -1,0 +1,171 @@
+
+/* CORPARTES ERP · FINAL UX 2026-10-19 */
+
+/* Global: historiales compactos y legibles */
+#module-pedidos .table-wrap,
+#module-lamina .table-wrap,
+#module-almacen .table-wrap,
+#module-mantenimiento .table-wrap,
+#module-seguimiento article.card.top-space .table-wrap{
+  border:1px solid #e2e8f0;
+  border-radius:14px;
+  overflow:auto;
+}
+#module-pedidos .table-wrap thead th,
+#module-lamina .table-wrap thead th,
+#module-almacen .table-wrap thead th,
+#module-mantenimiento .table-wrap thead th,
+#module-seguimiento article.card.top-space .table-wrap thead th{
+  position:sticky;
+  top:0;
+  z-index:3;
+  background:#f8fafc;
+}
+#orders-tab-pedidos>article.card.top-space>.table-wrap{max-height:530px}
+#orders-tab-reprocesos article.card:not(.reprocess-card) .table-wrap{max-height:440px}
+#module-produccion #productionLastRecordsCard .table-wrap{max-height:430px}
+#module-lamina article.card.top-space .table-wrap{max-height:430px}
+#module-almacen .table-wrap{max-height:460px}
+#module-mantenimiento .table-wrap{max-height:480px}
+#module-seguimiento article.card.top-space .table-wrap{max-height:500px}
+
+/* Pedidos: filtros sin desbordes */
+#v742OrderFilters{overflow:hidden}
+#v742OrderFilters .v742-order-filter-grid{
+  grid-template-columns:repeat(4,minmax(150px,1fr))!important;
+  gap:10px!important;
+}
+#v742OrderFilters .v742-field,
+#v742OrderFilters input,
+#v742OrderFilters select{min-width:0!important;max-width:100%!important}
+#v742OrderClear{width:100%!important;margin:0!important;min-height:38px!important}
+@media(max-width:900px){#v742OrderFilters .v742-order-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:620px){#v742OrderFilters .v742-order-filter-grid{grid-template-columns:1fr!important}}
+
+/* Reprocesos: selector de etapas */
+#orders-tab-reprocesos #reprocessProcessChecks{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(190px,1fr))!important;
+  gap:14px!important;
+  margin-top:12px!important;
+}
+#orders-tab-reprocesos .cp-reprocess-stage-box{
+  background:linear-gradient(180deg,#f8fbff,#fff)!important;
+  border:1px solid #cfe1ff!important;
+  border-radius:20px!important;
+  padding:18px!important;
+  box-shadow:0 8px 24px rgba(37,99,235,.06)!important;
+}
+#orders-tab-reprocesos #reprocessProcessChecks label{
+  display:flex!important;align-items:center!important;gap:13px!important;
+  min-height:78px!important;padding:14px 16px!important;border:1px solid #dbe7f3!important;
+  border-radius:16px!important;background:#fff!important;cursor:pointer!important;
+  box-shadow:0 5px 16px rgba(15,23,42,.04)!important;transition:.16s ease!important;
+}
+#orders-tab-reprocesos #reprocessProcessChecks label:hover{transform:translateY(-1px);border-color:#93c5fd!important}
+#orders-tab-reprocesos #reprocessProcessChecks label.cp-selected{
+  border:2px solid #3b82f6!important;background:#eff6ff!important;box-shadow:0 10px 24px rgba(37,99,235,.12)!important;
+}
+#orders-tab-reprocesos #reprocessProcessChecks input[type="checkbox"]{
+  appearance:none!important;-webkit-appearance:none!important;width:26px!important;height:26px!important;min-width:26px!important;
+  border:2px solid #94a3b8!important;border-radius:8px!important;background:#fff!important;display:grid!important;place-items:center!important;margin:0!important;
+}
+#orders-tab-reprocesos #reprocessProcessChecks input:checked{background:#2563eb!important;border-color:#2563eb!important}
+#orders-tab-reprocesos #reprocessProcessChecks input:checked::after{content:"✓";color:#fff;font-weight:900;font-size:14px}
+#orders-tab-reprocesos #reprocessProcessChecks .chip{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;
+  min-height:42px!important;padding:9px 14px!important;border-radius:999px!important;font-weight:900!important;white-space:normal!important;
+}
+@media(max-width:900px){#orders-tab-reprocesos #reprocessProcessChecks{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:620px){#orders-tab-reprocesos #reprocessProcessChecks{grid-template-columns:1fr!important}}
+
+/* Biblioteca: encabezados azules apilados + acordeón */
+#orders-tab-biblioteca #v801ProductsBody{display:grid!important;gap:12px!important}
+#orders-tab-biblioteca .v801-product-group{
+  border:1px solid #bfdbfe!important;border-radius:18px!important;overflow:hidden!important;background:#fff!important;
+  box-shadow:0 8px 20px rgba(15,23,42,.05)!important;
+}
+#orders-tab-biblioteca .v801-product-group-header{cursor:pointer!important}
+#orders-tab-biblioteca .v801-product-card-grid{display:none!important;padding:15px!important;background:#f8fbff!important;border-top:1px solid #dbeafe!important}
+#orders-tab-biblioteca .v801-product-group.cp-open .v801-product-card-grid{display:grid!important}
+#orders-tab-biblioteca .cp-library-chevron{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;width:32px!important;height:32px!important;
+  border-radius:999px!important;background:rgba(255,255,255,.18)!important;color:#fff!important;font-weight:900!important;margin-left:8px!important;
+}
+#orders-tab-biblioteca .v801-product-group.cp-open .cp-library-chevron{transform:rotate(180deg)}
+.cp-library-guide{padding:11px 13px;margin:10px 0 14px;border-radius:12px;background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;font-size:12px}
+
+/* Producción: consumo de lámina guiado */
+#module-produccion #productionSheetConsumption{
+  border:1px solid #bfdbfe!important;border-radius:18px!important;background:linear-gradient(180deg,#eff6ff,#f8fbff)!important;padding:18px!important;
+}
+.cp-sheet-guide{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.cp-sheet-guide span{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid #bfdbfe;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:800;color:#1e3a8a}
+.cp-sheet-guide b{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#2563eb;color:#fff;font-size:10px}
+#module-produccion .sheet-consumption-entry{grid-template-columns:minmax(280px,1fr) 170px auto!important;gap:10px!important}
+#module-produccion #productionSheetDamageBox{
+  margin-top:14px!important;border:1px solid #fed7aa!important;border-radius:16px!important;background:#fff7ed!important;padding:15px!important;
+}
+.cp-delivery-block-note{margin:12px 0 0;padding:11px 13px;border-radius:12px;background:#fef2f2;border:1px solid #fecaca;color:#991b1b;font-size:12px;font-weight:800}
+
+/* Inventario de lámina */
+#module-lamina .inventory-main-grid{align-items:start!important}
+#module-lamina .sheet-manager-write,#module-lamina .inventory-query-card{border-radius:18px!important}
+#module-lamina .inventory-consumption-filters,
+#module-lamina .sheet-movement-filters{
+  padding:12px!important;border:1px solid #e2e8f0!important;border-radius:14px!important;background:#f8fafc!important;
+}
+#module-lamina .inventory-filter-summary{margin:10px 0!important}
+
+/* Seguimiento */
+#module-seguimiento .tracking-filters-simple{
+  grid-template-columns:140px 120px minmax(180px,1fr) 160px minmax(220px,1.2fr)!important;
+}
+#module-seguimiento .calendar-card{border-radius:18px!important}
+#module-seguimiento .calendar-day{min-height:155px!important}
+@media(max-width:900px){#module-seguimiento .tracking-filters-simple{grid-template-columns:1fr 1fr!important}}
+@media(max-width:620px){#module-seguimiento .tracking-filters-simple{grid-template-columns:1fr!important}}
+
+/* Informes */
+#module-informes .report-kpis{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+#module-informes .report-card{border-radius:18px!important}
+.cp-report-note{margin:0 0 14px;padding:10px 12px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;color:#1e3a8a;font-size:12px}
+@media(max-width:900px){#module-informes .report-kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+
+/* Almacén */
+#module-almacen .warehouse-entry-grid{align-items:start!important}
+#module-almacen .report-kpis{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+#module-almacen article.card{border-radius:18px!important}
+
+/* Mantenimiento */
+#module-mantenimiento .maintenance-history-filters{
+  display:grid!important;grid-template-columns:repeat(5,minmax(130px,1fr))!important;gap:8px!important;width:100%!important;
+}
+#module-mantenimiento .maintenance-config-card,
+#module-mantenimiento .maintenance-selector-card,
+#module-mantenimiento .maintenance-report-card{border-radius:18px!important}
+#module-mantenimiento .maintenance-history-filters .compact-input{width:100%!important}
+@media(max-width:1000px){#module-mantenimiento .maintenance-history-filters{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:620px){#module-mantenimiento .maintenance-history-filters{grid-template-columns:1fr!important}}
+
+/* Remisiones VFinal */
+#module-remisiones .v19-rem-card{border-radius:20px!important;padding:18px!important}
+#module-remisiones .v19-rem-toolbar{
+  grid-template-columns:repeat(4,minmax(150px,1fr))!important;gap:10px!important;padding:14px!important;
+  border:1px solid #e2e8f0!important;border-radius:14px!important;background:#f8fafc!important;
+}
+#module-remisiones .v19-rem-toolbar .button{width:100%!important;min-height:40px!important;margin:0!important}
+#module-remisiones .v19-rem-table-wrap{max-height:560px!important;overflow:auto!important;border:1px solid #e2e8f0!important;border-radius:14px!important}
+#module-remisiones .v19-rem-table thead th{position:sticky!important;top:0!important;z-index:3!important;background:#f8fafc!important}
+#module-remisiones .cp-rem-detail-row.hidden{display:none!important}
+#module-remisiones .cp-rem-detail-row td{padding:0!important;background:#f8fbff!important}
+#module-remisiones .cp-rem-detail-panel{padding:16px!important;display:grid!important;gap:12px!important}
+#module-remisiones .cp-rem-meta{display:flex!important;gap:7px!important;flex-wrap:wrap!important}
+#module-remisiones .cp-rem-meta span{padding:5px 8px;border:1px solid #dbeafe;border-radius:999px;background:#fff;font-size:11px;color:#475569}
+#module-remisiones .cp-rem-items{max-height:240px;overflow:auto;border:1px solid #dbeafe;border-radius:12px;background:#fff}
+#module-remisiones .cp-rem-items table{width:100%;border-collapse:collapse}
+#module-remisiones .cp-rem-items th,#module-remisiones .cp-rem-items td{padding:8px 9px;border-bottom:1px solid #eef2f7;font-size:11px}
+#module-remisiones .cp-rem-actions{display:flex;gap:6px;flex-wrap:wrap}
+.cp-rem-count{text-align:right;color:#64748b;font-size:11px;margin:8px 0}
+@media(max-width:900px){#module-remisiones .v19-rem-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:620px){#module-remisiones .v19-rem-toolbar{grid-template-columns:1fr!important}}
