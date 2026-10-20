@@ -5051,7 +5051,14 @@ function configurePermissions() {
 }
 function openModule(module) {
   if (!canAccess(module)) return;
-  $$(".nav-button").forEach(b => b.classList.toggle("active", b.dataset.module === module));
+
+  /* CORPARTES FIX 20261020:
+     Remisiones es un módulo dinámico; debe existir antes de activar navegación. */
+  if (module === "remisiones" && typeof v19EnsurePage === "function") {
+    v19EnsurePage();
+  }
+
+  $(".nav-button").forEach(b => b.classList.toggle("active", b.dataset.module === module));
   $$(".module").forEach(s => s.classList.toggle("active", s.id === `module-${module}`));
   const labels={
     inicio:["Command Center","Visión ejecutiva de la operación en tiempo real"],
@@ -22388,10 +22395,17 @@ function v19MountTab(){
     btn.type="button";
     btn.id="v19RemissionsTab";
     anchor.parentElement.insertBefore(btn,anchor.nextSibling);
+  }
+
+  /* CORPARTES FIX 20261020:
+     el botón puede existir desde el HTML principal; enlazarlo siempre una sola vez. */
+  if(btn.dataset.v19Bound!=="1"){
     btn.addEventListener("click",function(e){
       e.preventDefault();
+      e.stopPropagation();
       v19OpenPage();
     });
+    btn.dataset.v19Bound="1";
   }
 
   btn.className="nav-button";
@@ -28671,3 +28685,4 @@ window.v705RunInQuotationScope((function(){
 </script>
 </body>
 </html>
+<script async data-explicit-opt-in="true" data-deployment-id="dpl_3tDaW9R5ayughiQjaEUPkB7F6tc3" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
