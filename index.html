@@ -5056,6 +5056,7 @@ function openModule(module) {
   const labels={
     inicio:["Command Center","Visión ejecutiva de la operación en tiempo real"],
     pedidos:["Pedidos","Pedidos, reprocesos y órdenes de fabricación"],
+    remisiones:["Remisiones","Entregas, soportes firmados y trazabilidad documental"],
     produccion:["Producción","Avance por proceso, pieza y operario"],
     lamina:["Inventario","Lámina, consumos y trazabilidad de materiales"],
     seguimiento:["Seguimiento","Calendario, cumplimiento y entregas"],
@@ -22528,7 +22529,7 @@ function v19EnsurePage(){
   return page;
 }
 
-function v19OpenPage(){function v19OpenPage(){
+function v19OpenPage(){
   if(!v19Allowed()){
     return alert("No tienes permiso para acceder al m\u00f3dulo de remisiones.");
   }
