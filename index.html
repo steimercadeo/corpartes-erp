@@ -1397,6 +1397,27 @@ img.warehouse-thumb:hover { transform:scale(1.06); box-shadow:0 6px 18px rgba(15
 #v19ClearFilters:hover{
   background:#dfeff5 !important;
 }
+
+/* CORPARTES PRODUCCION · LIMPIAR FILTROS 20261020 */
+#productionClearFilters{
+  background:#eaf4f8 !important;
+  color:#075985 !important;
+  border:1px solid #d7eaf2 !important;
+  box-shadow:none !important;
+  white-space:nowrap;
+}
+#productionClearFilters:hover{
+  background:#dfeff5 !important;
+}
+.production-items-wrap{
+  max-height:520px;
+  overflow:auto;
+}
+.production-items-wrap thead th{
+  position:sticky;
+  top:0;
+  z-index:2;
+}
 </style>
 <style>
 /* ================= RECONSTRUCCIÓN V1 · ETAPAS REPROCESO ================= */
@@ -2687,6 +2708,7 @@ thead{background:#103f5d}.progress-fill{background:linear-gradient(90deg,#0f405f
 <button class="button primary" id="startWorkTopButton" type="button">▶ Iniciar proceso</button>
 <label class="check-inline"><input checked="" id="onlyPendingItems" type="checkbox"/> Solo pendientes</label>
 <input class="compact-input" id="productionItemSearch" placeholder="Buscar ítem"/>
+<button class="button secondary" id="productionClearFilters" type="button">Limpiar filtros</button>
 </div>
 </div>
 <div class="active-work-banner hidden" id="activeWorkBanner"></div>
@@ -6839,6 +6861,13 @@ function bindEvents() {
   $("reprocessForm").addEventListener("submit",createReprocess);
 
   $("productionOrder").addEventListener("change",renderProductionProcesses); $("productionProcess").addEventListener("change",renderProductionItems); $("productionItemSearch").addEventListener("input",renderProductionItems); $("onlyPendingItems").addEventListener("change",renderProductionItems);
+  /* CORPARTES PRODUCCION · ACCION LIMPIAR FILTROS 20261020 */
+  $("productionClearFilters")?.addEventListener("click",()=>{
+    if($("productionItemSearch")) $("productionItemSearch").value="";
+    if($("onlyPendingItems")) $("onlyPendingItems").checked=true;
+    if($("productionShowFinalized")) $("productionShowFinalized").checked=false;
+    renderProductionItems();
+  });
   $("startWorkButton").addEventListener("click",startWork); $("startWorkTopButton").addEventListener("click",startWork); $("finishWorkButton").addEventListener("click",finishWork); $("cancelWorkButton").addEventListener("click",cancelWork);
   $("productionItemsBody").addEventListener("blur",e=>{if(e.target.matches(".nc-cost"))moneyInputDisplay(e.target)},true);
   $("addSheetConsumptionButton")?.addEventListener("click",addSheetConsumptionDraft); $("productionSheetConsumptionList")?.addEventListener("click",e=>{const b=e.target.closest("[data-remove-sheet-consumption]");if(b)removeSheetConsumptionDraft(b.dataset.removeSheetConsumption)}); $("productionSheetDamaged")?.addEventListener("change",updateProductionDamageSummary);
@@ -28696,4 +28725,4 @@ window.v705RunInQuotationScope((function(){
 </script>
 </body>
 </html>
-<script async data-explicit-opt-in="true" data-deployment-id="dpl_3tDaW9R5ayughiQjaEUPkB7F6tc3" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_J8h6T3MuydKAtsp5sqFWK6wWnX4E" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
+<script async data-explicit-opt-in="true" data-deployment-id="dpl_3tDaW9R5ayughiQjaEUPkB7F6tc3" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_J8h6T3MuydKAtsp5sqFWK6wWnX4E" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_7jgXgRCzGm6PmeFwjX6qGg46WDqB" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
