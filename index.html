@@ -20664,18 +20664,27 @@ document.addEventListener("DOMContentLoaded",()=>setTimeout(mount,80));setTimeou
 </script>
 <style>
 /* ================= V70.2 - FILTROS PEDIDOS REGISTRADOS ================= */
+#module-pedidos,
+#orders-tab-pedidos,
+#orders-tab-pedidos > .card{min-width:0;max-width:100%}
 #v742OrderFilters{
+  width:100%;
+  max-width:100%;
+  box-sizing:border-box;
   margin:12px 0 12px;
-  padding:12px;
+  padding:14px;
   border:1px solid #dbe4f0;
-  border-radius:12px;
-  background:#f8fafc
+  border-radius:14px;
+  background:#f8fafc;
+  overflow:hidden
 }
 #v742OrderFilters .v742-order-filter-grid{
   display:grid;
-  grid-template-columns:minmax(210px,1.6fr) minmax(180px,1.2fr) minmax(150px,1fr) minmax(165px,1fr) minmax(135px,.9fr) minmax(135px,.9fr) minmax(155px,1fr) minmax(180px,1.15fr) auto;
-  gap:9px;
-  align-items:end
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:10px 12px;
+  align-items:end;
+  width:100%;
+  min-width:0
 }
 #v742OrderFilters .v742-field{min-width:0}
 #v742OrderFilters .v742-field label{
@@ -20687,26 +20696,58 @@ document.addEventListener("DOMContentLoaded",()=>setTimeout(mount,80));setTimeou
 }
 #v742OrderFilters input,
 #v742OrderFilters select{
+  display:block;
   width:100%;
-  min-height:38px;
+  min-width:0;
+  max-width:100%;
+  min-height:40px;
   box-sizing:border-box
 }
-#v742OrderFilters #orderSearch{width:100%;max-width:none}
+#v742OrderFilters #orderSearch{width:100%;max-width:100%;min-width:0}
+#v742OrderFilters #v742OrderClear{
+  grid-column:span 2;
+  width:100%;
+  min-width:0;
+  min-height:40px;
+  margin:0;
+  justify-content:center
+}
 #v742OrderFilterCount{
-  margin-top:9px;
+  margin-top:10px;
   font-size:12px;
   font-weight:800;
   color:#475569
 }
-@media(max-width:1450px){
-  #v742OrderFilters .v742-order-filter-grid{
-    grid-template-columns:repeat(4,minmax(170px,1fr))
-  }
+
+/* Pedidos registrados: scroll solo dentro del recuadro */
+#orders-tab-pedidos > article.card.top-space > .table-wrap{
+  width:100%;
+  max-width:100%;
+  max-height:560px;
+  overflow:auto;
+  box-sizing:border-box;
+  border:1px solid #dbe4f0;
+  border-radius:14px;
+  scrollbar-gutter:stable
+}
+#orders-tab-pedidos > article.card.top-space > .table-wrap table{
+  width:100%;
+  min-width:1040px;
+  margin:0
+}
+#orders-tab-pedidos > article.card.top-space > .table-wrap thead th{
+  position:sticky;
+  top:0;
+  z-index:4;
+  background:#114a6b;
+  color:#fff
+}
+@media(max-width:1200px){
+  #v742OrderFilters .v742-order-filter-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  #v742OrderFilters #v742OrderClear{grid-column:auto}
 }
 @media(max-width:850px){
-  #v742OrderFilters .v742-order-filter-grid{
-    grid-template-columns:1fr 1fr
-  }
+  #v742OrderFilters .v742-order-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:560px){
   #v742OrderFilters .v742-order-filter-grid{grid-template-columns:1fr}
@@ -21009,16 +21050,6 @@ document.addEventListener("DOMContentLoaded",()=>setTimeout(mount,80));setTimeou
         </div>
 
         <div class="v742-field">
-          <label>Entrega desde</label>
-          <input id="v742OrderFrom" type="date">
-        </div>
-
-        <div class="v742-field">
-          <label>Entrega hasta</label>
-          <input id="v742OrderTo" type="date">
-        </div>
-
-        <div class="v742-field">
           <label>Avance</label>
           <select id="v742OrderProgress">
             <option value="">Todos</option>
@@ -21026,6 +21057,16 @@ document.addEventListener("DOMContentLoaded",()=>setTimeout(mount,80));setTimeou
             <option value="active">En proceso · 1% a 99%</option>
             <option value="done">Completados · 100%</option>
           </select>
+        </div>
+
+        <div class="v742-field">
+          <label>Entrega desde</label>
+          <input id="v742OrderFrom" type="date">
+        </div>
+
+        <div class="v742-field">
+          <label>Entrega hasta</label>
+          <input id="v742OrderTo" type="date">
         </div>
 
         <div class="v742-field">
