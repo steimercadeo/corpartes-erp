@@ -22076,6 +22076,114 @@ td.qty,th.qty{text-align:right;width:90px}.total{margin-top:10px;text-align:righ
     padding:12px;
   }
 }
+
+/* RECONSTRUCCIÓN V1 · REMISIONES RESUMIDAS */
+.v19-rem-toolbar{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px 12px;
+  padding:14px;
+  border:1px solid #e2e8f0;
+  border-radius:14px;
+  background:#f8fafc;
+}
+.v19-rem-toolbar .button{
+  width:100%;
+  min-height:40px;
+  margin:0;
+  align-self:end;
+}
+.v19-rem-result-count{
+  margin:0 0 9px;
+  color:#64748b;
+  font-size:12px;
+  font-weight:800;
+  text-align:right;
+}
+.v19-rem-table-wrap{
+  max-height:560px;
+  overflow:auto;
+  border:1px solid #dbe4f0;
+  border-radius:14px;
+  scrollbar-gutter:stable;
+}
+.v19-rem-table{min-width:920px}
+.v19-rem-table th{
+  position:sticky;
+  top:0;
+  z-index:4;
+  background:#114a6b;
+  color:#fff;
+}
+.v19-rem-summary-row td{vertical-align:middle}
+.v19-rem-number{color:#173f70;font-size:13px}
+.v19-rem-status{
+  display:inline-flex;
+  align-items:center;
+  padding:6px 9px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:900;
+  white-space:nowrap;
+}
+.v19-rem-status.ok{background:#dcfce7;color:#166534}
+.v19-rem-status.pending{background:#fff7ed;color:#9a3412}
+.v19-rem-detail-row.hidden{display:none!important}
+.v19-rem-detail-row td{
+  padding:0!important;
+  background:#f8fbff;
+  border-bottom:2px solid #dbeafe;
+}
+.v19-rem-detail-panel{
+  display:grid;
+  gap:14px;
+  padding:16px 18px;
+}
+.v19-rem-detail-head strong{font-size:14px;color:#173f70}
+.v19-rem-detail-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:8px;
+}
+.v19-rem-detail-meta span{
+  padding:5px 8px;
+  border:1px solid #dbeafe;
+  border-radius:999px;
+  background:#fff;
+  color:#475569;
+  font-size:11px;
+}
+.v19-rem-detail-items{
+  max-height:260px;
+  overflow:auto;
+  border:1px solid #dbeafe;
+  border-radius:12px;
+  background:#fff;
+}
+.v19-rem-detail-items table{
+  width:100%;
+  border-collapse:collapse;
+}
+.v19-rem-detail-items th,
+.v19-rem-detail-items td{
+  padding:9px 10px!important;
+  border-bottom:1px solid #eef2f7!important;
+  background:#fff!important;
+  font-size:11px;
+}
+.v19-rem-detail-items th{
+  position:sticky;
+  top:0;
+  z-index:2;
+  background:#f8fafc!important;
+  color:#64748b;
+}
+@media(max-width:1050px){
+  .v19-rem-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:560px){
+  .v19-rem-toolbar{grid-template-columns:1fr}
+}
 </style>
 <script>
 (function(){
@@ -22308,18 +22416,17 @@ function v19EnsurePage(){
 
       <div class="v19-rem-header">
         <div class="v19-rem-title">
-          <span class="eyebrow">Control documental ESS</span>
+          <span class="eyebrow">Control documental CORPARTES</span>
           <h1>Remisiones</h1>
           <div class="v19-rem-subtitle">
-            Crear, consultar y volver a imprimir remisiones sin afectar producci\u00f3n.
+            Consulta rápidamente cada remisión y abre el detalle solo cuando lo necesites.
           </div>
         </div>
 
         <div class="v19-rem-header-actions">
           <button type="button" class="button primary" id="v19NewRemission">
-            + Nueva remisi\u00f3n
+            + Nueva remisión
           </button>
-
           <button type="button" class="button secondary" id="v19ClosePage">
             Cerrar
           </button>
@@ -22330,12 +22437,8 @@ function v19EnsurePage(){
 
         <div class="v19-rem-toolbar">
           <div class="v19-rem-field">
-            <label>N\u00famero de pedido</label>
-            <input
-              id="v19OrderNumberFilter"
-              placeholder="Ej. 6458"
-              autocomplete="off"
-            >
+            <label>Número de remisión</label>
+            <input id="v19RemissionNumberFilter" placeholder="Ej. 1025" autocomplete="off">
           </div>
 
           <div class="v19-rem-field">
@@ -22346,12 +22449,26 @@ function v19EnsurePage(){
           </div>
 
           <div class="v19-rem-field">
-            <label>Fecha inicial</label>
+            <label>Pedido</label>
+            <input id="v19OrderNumberFilter" placeholder="Ej. 6458" autocomplete="off">
+          </div>
+
+          <div class="v19-rem-field">
+            <label>Estado</label>
+            <select id="v19StatusFilter">
+              <option value="">Todos los estados</option>
+              <option value="support">Con soporte</option>
+              <option value="pending">Pendiente soporte</option>
+            </select>
+          </div>
+
+          <div class="v19-rem-field">
+            <label>Fecha desde</label>
             <input id="v19DateFromFilter" type="date">
           </div>
 
           <div class="v19-rem-field">
-            <label>Fecha final</label>
+            <label>Fecha hasta</label>
             <input id="v19DateToFilter" type="date">
           </div>
 
@@ -22360,19 +22477,19 @@ function v19EnsurePage(){
           </button>
         </div>
 
+        <div class="v19-rem-result-count" id="v19ResultCount"></div>
+
         <div class="v19-rem-table-wrap">
           <table class="v19-rem-table">
             <thead>
               <tr>
-                <th>Remisi\u00f3n</th>
-                <th>Fecha</th>
-                <th>Pedido</th>
+                <th>Remisión</th>
                 <th>Cliente</th>
-                <th>\u00cdtems</th>
-                <th>Unidades</th>
-                <th>Creada por</th>
-                <th>\u00daltima modificaci\u00f3n</th>
-                <th>Acciones</th>
+                <th>Pedido</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Soporte</th>
+                <th>Detalle</th>
               </tr>
             </thead>
             <tbody id="v19HistoryBody"></tbody>
@@ -22385,40 +22502,32 @@ function v19EnsurePage(){
 
   (document.querySelector(".main-content")||document.body).appendChild(page);
 
-  document.getElementById("v19ClosePage")
-    .addEventListener("click",v19ClosePage);
+  document.getElementById("v19ClosePage").addEventListener("click",v19ClosePage);
+  document.getElementById("v19NewRemission").addEventListener("click",()=>v19OpenEditor(null));
 
-  document.getElementById("v19NewRemission")
-    .addEventListener("click",()=>v19OpenEditor(null));
+  document.getElementById("v19RemissionNumberFilter").addEventListener("input",v19RenderHistory);
+  document.getElementById("v19OrderNumberFilter").addEventListener("input",v19RenderHistory);
+  document.getElementById("v19ClientFilter").addEventListener("change",v19RenderHistory);
+  document.getElementById("v19StatusFilter").addEventListener("change",v19RenderHistory);
+  document.getElementById("v19DateFromFilter").addEventListener("change",v19RenderHistory);
+  document.getElementById("v19DateToFilter").addEventListener("change",v19RenderHistory);
 
-  document.getElementById("v19OrderNumberFilter")
-    .addEventListener("input",v19RenderHistory);
+  document.getElementById("v19ClearFilters").addEventListener("click",function(){
+    document.getElementById("v19RemissionNumberFilter").value="";
+    document.getElementById("v19OrderNumberFilter").value="";
+    document.getElementById("v19ClientFilter").value="";
+    document.getElementById("v19StatusFilter").value="";
+    document.getElementById("v19DateFromFilter").value="";
+    document.getElementById("v19DateToFilter").value="";
+    v19RenderHistory();
+  });
 
-  document.getElementById("v19ClientFilter")
-    .addEventListener("change",v19RenderHistory);
-
-  document.getElementById("v19DateFromFilter")
-    .addEventListener("change",v19RenderHistory);
-
-  document.getElementById("v19DateToFilter")
-    .addEventListener("change",v19RenderHistory);
-
-  document.getElementById("v19ClearFilters")
-    .addEventListener("click",function(){
-      document.getElementById("v19OrderNumberFilter").value="";
-      document.getElementById("v19ClientFilter").value="";
-      document.getElementById("v19DateFromFilter").value="";
-      document.getElementById("v19DateToFilter").value="";
-      v19RenderHistory();
-    });
-
-  document.getElementById("v19HistoryBody")
-    .addEventListener("click",v19HistoryClick);
+  document.getElementById("v19HistoryBody").addEventListener("click",v19HistoryClick);
 
   return page;
 }
 
-function v19OpenPage(){
+function v19OpenPage(){function v19OpenPage(){
   if(!v19Allowed()){
     return alert("No tienes permiso para acceder al m\u00f3dulo de remisiones.");
   }
@@ -22488,73 +22597,42 @@ function v19RenderHistory(){
   const body=document.getElementById("v19HistoryBody");
   if(!body)return;
 
-  const orderNumber=String(
-    document.getElementById("v19OrderNumberFilter")?.value||""
-  ).trim().toLowerCase();
-
-  const clientFilter=String(
-    document.getElementById("v19ClientFilter")?.value||""
-  ).trim().toLowerCase();
-
-  const dateFrom=
-    document.getElementById("v19DateFromFilter")?.value||"";
-
-  const dateTo=
-    document.getElementById("v19DateToFilter")?.value||"";
+  const remissionNumber=String(document.getElementById("v19RemissionNumberFilter")?.value||"").trim().toLowerCase();
+  const orderNumber=String(document.getElementById("v19OrderNumberFilter")?.value||"").trim().toLowerCase();
+  const clientFilter=String(document.getElementById("v19ClientFilter")?.value||"").trim().toLowerCase();
+  const statusFilter=document.getElementById("v19StatusFilter")?.value||"";
+  const dateFrom=document.getElementById("v19DateFromFilter")?.value||"";
+  const dateTo=document.getElementById("v19DateToFilter")?.value||"";
 
   let rows=[...state.data.remissions];
 
   rows=rows.filter(r=>{
+    if(remissionNumber&&!String(r.number||"").trim().toLowerCase().includes(remissionNumber))return false;
+    if(orderNumber&&!String(r.orderNumber||"").trim().toLowerCase().includes(orderNumber))return false;
+    if(clientFilter&&String(r.client||"").trim().toLowerCase()!==clientFilter)return false;
 
-    if(orderNumber){
-      const pedido=String(r.orderNumber||"")
-        .trim()
-        .toLowerCase();
+    const hasSupport=Boolean(r.receiptSupport?.id);
+    if(statusFilter==="support"&&!hasSupport)return false;
+    if(statusFilter==="pending"&&hasSupport)return false;
 
-      if(!pedido.includes(orderNumber)){
-        return false;
-      }
-    }
-
-    if(clientFilter){
-      const client=String(r.client||"")
-        .trim()
-        .toLowerCase();
-
-      if(client!==clientFilter){
-        return false;
-      }
-    }
-
-    const remDate=
-      String(r.date||"").slice(0,10);
-
-    if(
-      dateFrom &&
-      (!remDate || remDate<dateFrom)
-    ){
-      return false;
-    }
-
-    if(
-      dateTo &&
-      (!remDate || remDate>dateTo)
-    ){
-      return false;
-    }
+    const remDate=String(r.date||"").slice(0,10);
+    if(dateFrom&&(!remDate||remDate<dateFrom))return false;
+    if(dateTo&&(!remDate||remDate>dateTo))return false;
 
     return true;
   });
 
   rows.sort((a,b)=>
-    new Date(b.createdAt||b.date||0)-
-    new Date(a.createdAt||a.date||0)
+    String(b.number||"").localeCompare(String(a.number||""),"es",{numeric:true,sensitivity:"base"})
   );
+
+  const count=document.getElementById("v19ResultCount");
+  if(count)count.textContent=`Mostrando ${rows.length} remisión${rows.length===1?"":"es"}`;
 
   if(!rows.length){
     body.innerHTML=`
       <tr>
-        <td colspan="9" class="v19-rem-empty">
+        <td colspan="7" class="v19-rem-empty">
           No hay remisiones registradas con estos filtros.
         </td>
       </tr>
@@ -22563,102 +22641,83 @@ function v19RenderHistory(){
   }
 
   body.innerHTML=rows.map(r=>{
-    const units=(r.items||[]).reduce(
-      (s,x)=>s+Number(x.qty||0),
-      0
-    );
+    const items=r.items||[];
+    const units=items.reduce((s,x)=>s+Number(x.qty||0),0);
+    const hasSupport=Boolean(r.receiptSupport?.id);
+    const updated=r.updatedAt
+      ? `${v19FormatDate(r.updatedAt,true)} · ${v19Safe(r.updatedByName||"-")}`
+      : "Sin modificaciones";
 
-    const updated=
-      r.updatedAt
-        ? `${v19FormatDate(r.updatedAt,true)} \u00b7 ${v19Safe(r.updatedByName||"-")}`
-        : "-";
+    const detailRows=items.map((item,index)=>`
+      <tr>
+        <td>${index+1}</td>
+        <td><strong>${v19Safe(item.code||item.reference||"-")}</strong></td>
+        <td>${v19Safe(item.description||item.name||"-")}</td>
+        <td>${Number(item.qty||0).toLocaleString("es-CO")}</td>
+        <td>${v19Safe(item.note||item.observation||item.color||"-")}</td>
+      </tr>
+    `).join("")||'<tr><td colspan="5">Sin ítems registrados.</td></tr>';
+
+    const actions=`
+      <div class="v19-rem-actions">
+        <button type="button" class="button secondary small" data-v819-world-office="${v19Safe(r.id)}"
+          title="${r.worldOfficeExportedAt ? `Última exportación: ${v19Safe(v19FormatDate(r.worldOfficeExportedAt,true))}` : "Descargar Excel compatible con World Office"}">
+          ${r.worldOfficeExportedAt ? "World Office ✓" : "World Office"}
+        </button>
+
+        <button type="button" class="button secondary small" data-vwo-support="${v19Safe(r.id)}" data-vwo-direct-template
+          title="${r.worldOfficeSupport?.id ? 'Soporte World Office cargado' : 'Adjuntar evidencia del documento ingresado en World Office'}">
+          ${r.worldOfficeSupport?.id ? "Soporte WO ✓" : "Soporte WO"}
+        </button>
+
+        <button type="button" class="button secondary small" data-v19-print="${v19Safe(r.id)}">Imprimir</button>
+
+        <button type="button" class="button secondary small" data-v193-support="${v19Safe(r.id)}"
+          title="${r.receiptSupport?.id ? `Soporte cargado por ${v19Safe(r.receiptSupport.uploadedByName||r.receiptSupport.uploadedByCode||"-")}` : "Adjuntar soporte firmado de recibido"}">
+          ${r.receiptSupport?.id ? "Soporte ✓" : "Soporte"}
+        </button>
+
+        ${v19IsAdmin()?`
+          <button type="button" class="button secondary small" data-v19-edit="${v19Safe(r.id)}">Editar</button>
+          <button type="button" class="button small danger-outline" data-v19-delete="${v19Safe(r.id)}">Eliminar</button>
+        `:""}
+      </div>
+    `;
 
     return `
-      <tr>
-        <td><strong>${v19Safe(r.number||"-")}</strong></td>
-
+      <tr class="v19-rem-summary-row">
+        <td><strong class="v19-rem-number">${v19Safe(r.number||"-")}</strong></td>
+        <td><strong>${v19Safe(r.client||"-")}</strong></td>
+        <td>${v19Safe(r.orderNumber||"-")}</td>
         <td>${v19Safe(v19FormatDate(r.date,false))}</td>
+        <td><span class="v19-rem-status ${hasSupport?"ok":"pending"}">${hasSupport?"Con soporte":"Pendiente soporte"}</span></td>
+        <td>${hasSupport?"Firmado ✓":"Sin soporte"}</td>
+        <td><button type="button" class="button secondary small" data-v19-detail="${v19Safe(r.id)}">Ver detalle</button></td>
+      </tr>
+      <tr class="v19-rem-detail-row hidden" data-v19-detail-row="${v19Safe(r.id)}">
+        <td colspan="7">
+          <div class="v19-rem-detail-panel">
+            <div class="v19-rem-detail-head">
+              <div>
+                <strong>Remisión ${v19Safe(r.number||"-")} · Pedido ${v19Safe(r.orderNumber||"-")}</strong>
+                <div class="v19-rem-detail-meta">
+                  <span>${v19Safe(r.client||"-")}</span>
+                  <span>${items.length} ítem(s)</span>
+                  <span>${units.toLocaleString("es-CO")} unidades</span>
+                  <span>Creada por ${v19Safe(r.createdByName||r.createdByCode||"-")}</span>
+                  <span>${updated}</span>
+                </div>
+              </div>
+            </div>
 
-        <td>
-          <strong>${v19Safe(r.orderNumber||"-")}</strong>
-        </td>
+            <div class="v19-rem-detail-items">
+              <table>
+                <thead><tr><th>#</th><th>Código</th><th>Descripción</th><th>Cantidad</th><th>Observación</th></tr></thead>
+                <tbody>${detailRows}</tbody>
+              </table>
+            </div>
 
-        <td>${v19Safe(r.client||"-")}</td>
-
-        <td>${Number((r.items||[]).length).toLocaleString("es-CO")}</td>
-
-        <td>${Number(units).toLocaleString("es-CO")}</td>
-
-        <td>
-          ${v19Safe(r.createdByName||r.createdByCode||"-")}
-          <div class="v19-admin-note">
-            ${v19Safe(v19FormatDate(r.createdAt,true))}
-          </div>
-        </td>
-
-        <td>${updated}</td>
-
-        <td>
-          <div class="v19-rem-actions">
-
-            <button
-              type="button"
-              class="button secondary small"
-              data-v819-world-office="${v19Safe(r.id)}"
-              title="${r.worldOfficeExportedAt ? `Última exportación: ${v19Safe(v19FormatDate(r.worldOfficeExportedAt,true))}` : "Descargar Excel compatible con World Office"}"
-            >
-              ${r.worldOfficeExportedAt ? "World Office ✓" : "World Office"}
-            </button>
-
-                        <button
-              type="button"
-              class="button secondary small"
-              data-vwo-support="${v19Safe(r.id)}"
-              data-vwo-direct-template
-              title="${r.worldOfficeSupport?.id ? 'Soporte World Office cargado' + (r.worldOfficeSupport.documentNumber ? ' · Documento ' + v19Safe(r.worldOfficeSupport.documentNumber) : '') : 'Adjuntar evidencia del documento ingresado en World Office'}"
-            >
-              ${r.worldOfficeSupport?.id ? "Soporte WO ✓" : "Soporte WO"}
-            </button>
-
-<button
-              type="button"
-              class="button secondary small"
-              data-v19-print="${v19Safe(r.id)}"
-            >
-              Imprimir
-            </button>
-
-            <button
-              type="button"
-              class="button secondary small"
-              data-v193-support="${v19Safe(r.id)}"
-              title="${r.receiptSupport?.id ? `Soporte cargado por ${v19Safe(r.receiptSupport.uploadedByName||r.receiptSupport.uploadedByCode||"-")}` : "Adjuntar soporte firmado de recibido"}"
-            >
-              ${r.receiptSupport?.id ? "Soporte \u2713" : "Soporte"}
-            </button>
-
-            ${
-              v19IsAdmin()
-                ? `
-                  <button
-                    type="button"
-                    class="button secondary small"
-                    data-v19-edit="${v19Safe(r.id)}"
-                  >
-                    Editar
-                  </button>
-
-                  <button
-                    type="button"
-                    class="button small danger-outline"
-                    data-v19-delete="${v19Safe(r.id)}"
-                  >
-                    Eliminar
-                  </button>
-                `
-                : ""
-            }
-
+            ${actions}
           </div>
         </td>
       </tr>
@@ -22667,12 +22726,27 @@ function v19RenderHistory(){
 }
 
 function v19HistoryClick(e){
+  const detailBtn=e.target.closest("[data-v19-detail]");
+  if(detailBtn){
+    const id=String(detailBtn.dataset.v19Detail||"");
+    const row=document.querySelector(`[data-v19-detail-row="${CSS.escape(id)}"]`);
+    if(!row)return;
+
+    const willOpen=row.classList.contains("hidden");
+
+    document.querySelectorAll("#v19HistoryBody .v19-rem-detail-row").forEach(x=>x.classList.add("hidden"));
+    document.querySelectorAll("#v19HistoryBody [data-v19-detail]").forEach(x=>x.textContent="Ver detalle");
+
+    if(willOpen){
+      row.classList.remove("hidden");
+      detailBtn.textContent="Ocultar detalle";
+    }
+    return;
+  }
+
   const printBtn=e.target.closest("[data-v19-print]");
   if(printBtn){
-    const r=state.data.remissions.find(
-      x=>String(x.id)===String(printBtn.dataset.v19Print)
-    );
-
+    const r=state.data.remissions.find(x=>String(x.id)===String(printBtn.dataset.v19Print));
     if(r)v19PrintSaved(r);
     return;
   }
@@ -22685,14 +22759,8 @@ function v19HistoryClick(e){
 
   const editBtn=e.target.closest("[data-v19-edit]");
   if(editBtn){
-    if(!v19IsAdmin()){
-      return alert("Solo el Administrador puede modificar remisiones.");
-    }
-
-    const r=state.data.remissions.find(
-      x=>String(x.id)===String(editBtn.dataset.v19Edit)
-    );
-
+    if(!v19IsAdmin())return alert("Solo el Administrador puede modificar remisiones.");
+    const r=state.data.remissions.find(x=>String(x.id)===String(editBtn.dataset.v19Edit));
     if(r)v19OpenEditor(r);
     return;
   }
@@ -22705,6 +22773,7 @@ function v19HistoryClick(e){
 
 
 /* ==========================================================
+   V70.2 - REMISIONES SOPORTE RECIBIDO V19.3/* ==========================================================
    V70.2 - REMISIONES SOPORTE RECIBIDO V19.3
    Evidencia de recibido firmada: foto o PDF.
    ========================================================== */
