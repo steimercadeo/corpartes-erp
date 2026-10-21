@@ -28653,6 +28653,68 @@ window.v705RunInQuotationScope((function(){
 .v625-summary .v625-stat:first-child > strong{
   line-height:1;
 }
+
+/* CORPARTES INVENTARIO · SCROLL INTERNO EN TABLAS 20261021 */
+#module-lamina .table-wrap:has(#sheetInventoryBody),
+#module-lamina .table-wrap:has(#sheetConsumptionBody),
+#module-lamina .table-wrap:has(#sheetMovementsBody),
+#v621DamageHistory .table-wrap:has(#v621DamageHistoryBody){
+  overflow:auto !important;
+  border:1px solid #dbe3ee !important;
+  border-radius:14px !important;
+  background:#fff !important;
+  scrollbar-width:thin;
+  scrollbar-color:#94a3b8 #eef3f7;
+}
+#module-lamina .table-wrap:has(#sheetInventoryBody){
+  max-height:420px !important;
+}
+#module-lamina .table-wrap:has(#sheetConsumptionBody){
+  max-height:460px !important;
+}
+#module-lamina .table-wrap:has(#sheetMovementsBody){
+  max-height:460px !important;
+}
+#v621DamageHistory .table-wrap:has(#v621DamageHistoryBody){
+  max-height:300px !important;
+}
+#module-lamina .table-wrap:has(#sheetInventoryBody) table,
+#module-lamina .table-wrap:has(#sheetConsumptionBody) table,
+#module-lamina .table-wrap:has(#sheetMovementsBody) table,
+#v621DamageHistory .table-wrap:has(#v621DamageHistoryBody) table{
+  margin:0 !important;
+}
+#module-lamina .table-wrap:has(#sheetInventoryBody) thead th,
+#module-lamina .table-wrap:has(#sheetConsumptionBody) thead th,
+#module-lamina .table-wrap:has(#sheetMovementsBody) thead th,
+#v621DamageHistory .table-wrap:has(#v621DamageHistoryBody) thead th{
+  position:sticky !important;
+  top:0 !important;
+  z-index:4 !important;
+  box-shadow:0 1px 0 rgba(15,23,42,.12);
+}
+#module-lamina .table-wrap:has(#sheetInventoryBody)::-webkit-scrollbar,
+#module-lamina .table-wrap:has(#sheetConsumptionBody)::-webkit-scrollbar,
+#module-lamina .table-wrap:has(#sheetMovementsBody)::-webkit-scrollbar,
+#v621DamageHistory .table-wrap:has(#v621DamageHistoryBody)::-webkit-scrollbar{
+  width:9px;
+  height:9px;
+}
+#module-lamina .table-wrap:has(#sheetInventoryBody)::-webkit-scrollbar-track,
+#module-lamina .table-wrap:has(#sheetConsumptionBody)::-webkit-scrollbar-track,
+#module-lamina .table-wrap:has(#sheetMovementsBody)::-webkit-scrollbar-track,
+#v621DamageHistory .table-wrap:has(#v621DamageHistoryBody)::-webkit-scrollbar-track{
+  background:#eef3f7;
+  border-radius:999px;
+}
+#module-lamina .table-wrap:has(#sheetInventoryBody)::-webkit-scrollbar-thumb,
+#module-lamina .table-wrap:has(#sheetConsumptionBody)::-webkit-scrollbar-thumb,
+#module-lamina .table-wrap:has(#sheetMovementsBody)::-webkit-scrollbar-thumb,
+#v621DamageHistory .table-wrap:has(#v621DamageHistoryBody)::-webkit-scrollbar-thumb{
+  background:#94a3b8;
+  border-radius:999px;
+  border:2px solid #eef3f7;
+}
 </style>
 <script>
 /* ESS V70_2 GUARDADO MAESTROS LAMINA V1_0_4
@@ -28788,4 +28850,4 @@ window.v705RunInQuotationScope((function(){
 </script>
 </body>
 </html>
-<script async data-explicit-opt-in="true" data-deployment-id="dpl_3tDaW9R5ayughiQjaEUPkB7F6tc3" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_J8h6T3MuydKAtsp5sqFWK6wWnX4E" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_7jgXgRCzGm6PmeFwjX6qGg46WDqB" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_4wcjTNDVhnMTj4YUUcLFcP4gRy9t" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_72zXoHmnANGAnh5sHJ5uxGdEjz3r" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
+<script async data-explicit-opt-in="true" data-deployment-id="dpl_3tDaW9R5ayughiQjaEUPkB7F6tc3" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_J8h6T3MuydKAtsp5sqFWK6wWnX4E" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_7jgXgRCzGm6PmeFwjX6qGg46WDqB" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_4wcjTNDVhnMTj4YUUcLFcP4gRy9t" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_72zXoHmnANGAnh5sHJ5uxGdEjz3r" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_FEkuVM5FtcErDYQ2oUAiYJcAQDop" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
