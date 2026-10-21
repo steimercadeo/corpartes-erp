@@ -2962,6 +2962,10 @@ thead{background:#103f5d}.progress-fill{background:linear-gradient(90deg,#0f405f
 <div class="horizontal-chart" id="reportProductionByProcess"></div>
 </article>
 <article class="chart-card report-card" data-report-card="">
+<div class="report-card-head"><div><span class="eyebrow">Cumplimiento operativo</span><h3>Cumplimiento por área / proceso</h3></div><button class="button ghost small" data-print-card="">🖨️ Imprimir</button></div>
+<div class="v-report-area-compliance" id="reportComplianceByArea"></div>
+</article>
+<article class="chart-card report-card" data-report-card="">
 <div class="report-card-head"><div><span class="eyebrow">Indicador ejecutivo</span><h3>Cumplimiento general de entregas</h3></div><button class="button ghost small" data-print-card="">🖨️ Imprimir</button></div>
 <div class="gauge-layout" id="reportComplianceGauge"></div>
 </article>
@@ -28716,46 +28720,10 @@ window.v705RunInQuotationScope((function(){
   border:2px solid #eef3f7;
 }
 
-/* CORPARTES SEGUIMIENTO · PEDIDOS DEL PERIODO SCROLL 20261021 */
-#module-seguimiento .table-wrap:has(#trackingTableBody){
-  max-height:460px !important;
-  overflow-y:auto !important;
-  overflow-x:auto !important;
-  border:1px solid #dbe3ee !important;
-  border-radius:16px !important;
-  background:#fff !important;
-  scrollbar-width:thin;
-  scrollbar-color:#94a3b8 #eef3f7;
-}
-#module-seguimiento .table-wrap:has(#trackingTableBody) table{
-  margin:0 !important;
-  width:100% !important;
-}
-#module-seguimiento .table-wrap:has(#trackingTableBody) thead th{
-  position:sticky !important;
-  top:0 !important;
-  z-index:4 !important;
-  box-shadow:0 1px 0 rgba(15,23,42,.12);
-}
-#module-seguimiento .table-wrap:has(#trackingTableBody)::-webkit-scrollbar{
-  width:9px;
-  height:9px;
-}
-#module-seguimiento .table-wrap:has(#trackingTableBody)::-webkit-scrollbar-track{
-  background:#eef3f7;
-  border-radius:999px;
-}
-#module-seguimiento .table-wrap:has(#trackingTableBody)::-webkit-scrollbar-thumb{
-  background:#94a3b8;
-  border-radius:999px;
-  border:2px solid #eef3f7;
-}
-
-/* CORPARTES INFORMES · KILOS Y VALOR DE LAMINA SCROLL 20261021 */
+/* CORPARTES INFORMES · TABLA ECONOMICA Y CUMPLIMIENTO POR AREA 20261021 */
 #v624SheetKgReportCard .table-wrap:has(#v624SheetKgBody){
-  max-height:460px !important;
-  overflow-y:auto !important;
-  overflow-x:auto !important;
+  max-height:440px !important;
+  overflow:auto !important;
   border:1px solid #dbe3ee !important;
   border-radius:16px !important;
   background:#fff !important;
@@ -28764,27 +28732,29 @@ window.v705RunInQuotationScope((function(){
 }
 #v624SheetKgReportCard .table-wrap:has(#v624SheetKgBody) table{
   margin:0 !important;
-  width:100% !important;
 }
 #v624SheetKgReportCard .table-wrap:has(#v624SheetKgBody) thead th{
   position:sticky !important;
   top:0 !important;
-  z-index:4 !important;
-  box-shadow:0 1px 0 rgba(15,23,42,.12);
+  z-index:5 !important;
+  box-shadow:0 1px 0 rgba(15,23,42,.14);
 }
-#v624SheetKgReportCard .table-wrap:has(#v624SheetKgBody)::-webkit-scrollbar{
-  width:9px;
-  height:9px;
+#v624SheetKgReportCard .table-wrap:has(#v624SheetKgBody)::-webkit-scrollbar{width:9px;height:9px}
+#v624SheetKgReportCard .table-wrap:has(#v624SheetKgBody)::-webkit-scrollbar-track{background:#eef3f7;border-radius:999px}
+#v624SheetKgReportCard .table-wrap:has(#v624SheetKgBody)::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:999px;border:2px solid #eef3f7}
+.v-report-area-compliance{display:grid;gap:10px}
+.v-report-area-row{
+  display:grid;
+  grid-template-columns:minmax(145px,1fr) minmax(180px,2fr) 64px;
+  gap:10px;
+  align-items:center;
 }
-#v624SheetKgReportCard .table-wrap:has(#v624SheetKgBody)::-webkit-scrollbar-track{
-  background:#eef3f7;
-  border-radius:999px;
-}
-#v624SheetKgReportCard .table-wrap:has(#v624SheetKgBody)::-webkit-scrollbar-thumb{
-  background:#94a3b8;
-  border-radius:999px;
-  border:2px solid #eef3f7;
-}
+.v-report-area-row strong{font-size:12px;color:#334155;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.v-report-area-track{height:11px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.v-report-area-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#0f4c6e,#2f91b7)}
+.v-report-area-row span{text-align:right;font-size:12px;font-weight:900;color:#173d68}
+.v-report-area-empty{color:#64748b;font-size:13px}
+@media(max-width:650px){.v-report-area-row{grid-template-columns:110px 1fr 54px}}
 </style>
 <script>
 /* ESS V70_2 GUARDADO MAESTROS LAMINA V1_0_4
@@ -28918,6 +28888,54 @@ window.v705RunInQuotationScope((function(){
   window.v709SheetCatalogPersistence={marker:MARK,save:saveCatalog,verify:verifyCloudCatalog};
 })();
 </script>
-</body>
+
+<script>
+/* CORPARTES INFORMES · RENDER CUMPLIMIENTO POR AREA 20261021 */
+(function(){
+  function renderComplianceByAreaCorpartes(){
+    const box=document.getElementById("reportComplianceByArea");
+    if(!box || typeof getReportFilters!=="function") return;
+    const f=getReportFilters();
+    const orders=(state.data.orders||[]).filter(o=>{
+      if(o.type!=="Pedido") return false;
+      if(typeof clientMatchesFilter==="function" && !clientMatchesFilter(o.client,f.client)) return false;
+      const d=new Date(String(o.deliveryDate||"")+"T12:00:00");
+      return d.getFullYear()===f.year && (f.month===-1 || d.getMonth()===f.month);
+    });
+    const rows=[];
+    (state.data.processes||[]).filter(p=>p.status!=="Inactivo").forEach(p=>{
+      let required=0,done=0;
+      orders.forEach(order=>{
+        (order.items||[]).forEach(item=>{
+          const route=typeof routeFor==="function"?routeFor(item,p.id):null;
+          if(!route) return;
+          const req=Number(route.requiredQty||item.qty||0);
+          const dn=typeof itemProcessInfo==="function"?Number(itemProcessInfo(order,item,p.id).done||0):0;
+          required+=req;
+          done+=Math.min(dn,req);
+        });
+      });
+      if(required>0){
+        rows.push({name:p.name||"Proceso",percent:Math.round(done/required*100),done,required,order:Number(p.order||999)});
+      }
+    });
+    rows.sort((a,b)=>a.order-b.order||a.name.localeCompare(b.name,"es"));
+    box.innerHTML=rows.length?rows.map(r=>`
+      <div class="v-report-area-row" title="${r.done.toLocaleString("es-CO")} de ${r.required.toLocaleString("es-CO")} piezas">
+        <strong>${escapeHtml(r.name)}</strong>
+        <div class="v-report-area-track"><div class="v-report-area-fill" style="width:${Math.max(0,Math.min(100,r.percent))}%"></div></div>
+        <span>${r.percent}%</span>
+      </div>`).join(""):`<p class="v-report-area-empty">Sin información para los filtros seleccionados.</p>`;
+  }
+  const baseRenderReportsCorpartes=window.renderReports;
+  if(typeof baseRenderReportsCorpartes==="function"){
+    window.renderReports=function(){
+      baseRenderReportsCorpartes();
+      renderComplianceByAreaCorpartes();
+    };
+  }
+  document.addEventListener("DOMContentLoaded",()=>setTimeout(renderComplianceByAreaCorpartes,0));
+})();
+</script></body>
 </html>
-<script async data-explicit-opt-in="true" data-deployment-id="dpl_3tDaW9R5ayughiQjaEUPkB7F6tc3" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_J8h6T3MuydKAtsp5sqFWK6wWnX4E" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_7jgXgRCzGm6PmeFwjX6qGg46WDqB" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_4wcjTNDVhnMTj4YUUcLFcP4gRy9t" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_72zXoHmnANGAnh5sHJ5uxGdEjz3r" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_FEkuVM5FtcErDYQ2oUAiYJcAQDop" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_EDDKwyxMPMmjzLSD7rHew7CfWZ9t" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_AEBBdPSYDHxZb8u9sQrXuDmencnm" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
+<script async data-explicit-opt-in="true" data-deployment-id="dpl_3tDaW9R5ayughiQjaEUPkB7F6tc3" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_J8h6T3MuydKAtsp5sqFWK6wWnX4E" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_7jgXgRCzGm6PmeFwjX6qGg46WDqB" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_4wcjTNDVhnMTj4YUUcLFcP4gRy9t" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_72zXoHmnANGAnh5sHJ5uxGdEjz3r" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_FEkuVM5FtcErDYQ2oUAiYJcAQDop" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_EDDKwyxMPMmjzLSD7rHew7CfWZ9t" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
