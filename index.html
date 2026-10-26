@@ -5100,8 +5100,13 @@ function openModule(module) {
 
   /* CORPARTES FIX 20261020:
      Remisiones es un módulo dinámico; debe existir antes de activar navegación. */
-  if (module === "remisiones" && typeof v19EnsurePage === "function") {
-    v19EnsurePage();
+  if (module === "remisiones") {
+    const ensureRemissions =
+      (typeof window!=="undefined" && typeof window.v19EnsurePage==="function")
+        ? window.v19EnsurePage
+        : (typeof v19EnsurePage==="function" ? v19EnsurePage : null);
+
+    if(ensureRemissions) ensureRemissions();
   }
 
   $(".nav-button").forEach(b => b.classList.toggle("active", b.dataset.module === module));
@@ -22617,6 +22622,12 @@ function v19ClosePage(){
   if(typeof openModule==="function")openModule("inicio");
   else document.getElementById("module-remisiones")?.classList.remove("active");
 }
+
+/* CORPARTES RECONSTRUCCIÓN V1 · puente público estable para Remisiones */
+window.v19EnsurePage=v19EnsurePage;
+window.v19OpenPage=v19OpenPage;
+window.v19OpenRemissions=v19OpenPage;
+
 
 function v19PopulateOrderFilter(){
   const sel=document.getElementById("v19ClientFilter");
