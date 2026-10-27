@@ -6308,33 +6308,7 @@ function openOptimizedPrintWindow({title="Informe ESS",html="",landscape=true}){
 
 <!-- ESS V2.5.4D - RETIRAR BOTON PROCESOS LISTADO -->
 <script src="./corpartes-ai-v1.js"></script>
-
-<script id="cp-ai-isolated-demo-gate">
-(function(){
-  // Preview only: a convenience demo, NOT an authentication bypass to Firebase.
-  document.addEventListener("submit",function(event){
-    if(event.target?.id!=="loginForm")return;
-    const code=String(document.getElementById("loginCode")?.value||"").trim().toUpperCase();
-    const pass=String(document.getElementById("loginPassword")?.value||"");
-    if(code!=="ADM01"||pass!=="ADM01")return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    try{sessionStorage.setItem("corpartes_ai_demo_session","1");}catch(_){}
-    location.assign("./demo.html");
-  },true);
-  function hint(){
-    const form=document.getElementById("loginForm");
-    if(!form||document.getElementById("cp-ai-demo-hint"))return;
-    const p=document.createElement("p");
-    p.id="cp-ai-demo-hint";
-    p.style.cssText="font-size:12px;line-height:1.5;margin:2px 0 0;color:#0f5273;background:#eff9ff;border:1px solid #c2e5f7;border-radius:10px;padding:10px";
-    p.textContent="Acceso de demostración: usuario ADM01 y clave ADM01. Abre una demo aislada con datos de ejemplo; no otorga acceso a los datos reales de la empresa.";
-    form.appendChild(p);
-  }
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",hint);
-  else hint();
-})();
-</script>
+<script src="./corpartes-crm-v1.js"></script>
 </body></html>`);
   w.document.close();
   waitForPrintAssets(w.document).finally(()=>{
