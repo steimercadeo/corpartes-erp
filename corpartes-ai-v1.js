@@ -413,6 +413,7 @@
 
     try{
       if(typeof CLOUD_META_KEYS !== "undefined" && CLOUD_META_KEYS.indexOf(CHAT_KEY) < 0) CLOUD_META_KEYS.push(CHAT_KEY);
+      if(state && state.data && !Array.isArray(state.data[CHAT_KEY])) state.data[CHAT_KEY]=[];
     }catch(_e){}
 
     var style = document.createElement("style");

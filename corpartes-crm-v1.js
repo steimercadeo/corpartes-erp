@@ -100,6 +100,7 @@ function save(e){
 function mount(){
  if(started||!document.querySelector(".main-nav")||!document.querySelector(".main-content"))return;
  try{if(typeof CLOUD_META_KEYS!=="undefined"&&!CLOUD_META_KEYS.includes(KEY))CLOUD_META_KEYS.push(KEY);}catch(_){}
+ if(state && state.data && !Array.isArray(state.data[KEY])) state.data[KEY]=[];
  const style=document.createElement("style");style.textContent=css();document.head.appendChild(style);
  const holder=document.createElement("div");holder.innerHTML=markup();
  document.querySelector(".main-content").appendChild(holder.firstElementChild);
