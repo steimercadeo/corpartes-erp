@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function memberPath() {
+      return /databases/$(database)/documents/corpartes_members/$(request.auth.uid);
+    }
+    function isOwner() {
+      return request.auth != null
+        && exists(memberPath())
+        && get(memberPath()).data.active == true
+        && get(memberPath()).data.role == "owner";
+    }
+
+    // La membresia se escribe SOLO desde un servidor administrador.
+    match /corpartes_members/{uid} {
+      allow get: if request.auth != null && request.auth.uid == uid;
+      allow list, create, update, delete: if false;
+    }
+
+    // Fase inicial: acceso exclusivo del propietario. Los documentos actuales
+    // contienen costos; no abrir permisos generales a todos los empleados.
+    match /{collection}/{docId} {
+      allow read, write: if isOwner() && collection in [
+        "ess_meta", "ess_sync", "ess_roles", "ess_users",
+        "ess_processes", "ess_orders", "ess_movements", "ess_remissions",
+        "ess_machines", "ess_maintenance_records",
+        "ess_warehouse_items", "ess_warehouse_movements",
+        "ess_sheet_stocks", "ess_sheet_movements", "ess_sheet_clients"
+      ];
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
