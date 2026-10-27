@@ -1,0 +1,27 @@
+name: Export CORPARTES ERP ZIP
+
+on:
+  push:
+    branches:
+      - reconstruccion-v1
+  workflow_dispatch:
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout reconstruction branch
+        uses: actions/checkout@v4
+
+      - name: Prepare export folder
+        run: |
+          mkdir -p export/CORPARTES_ERP_RECONSTRUCCION_V1
+          rsync -av --exclude='.git' --exclude='export' ./ export/CORPARTES_ERP_RECONSTRUCCION_V1/
+
+      - name: Upload complete ERP
+        uses: actions/upload-artifact@v4
+        with:
+          name: CORPARTES_ERP_RECONSTRUCCION_V1
+          path: export/CORPARTES_ERP_RECONSTRUCCION_V1
+          if-no-files-found: error
+          retention-days: 7
