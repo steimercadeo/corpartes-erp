@@ -68,6 +68,7 @@ function render(){
  const list=a.filter(r=>(stage==="todos"||r.stage===stage)&&(!query||norm([r.company,r.sector,r.contact,r.email].join(" ")).includes(query))).sort((p,q)=>str(p.company).localeCompare(str(q.company),"es"));
  $("crmRealRows").innerHTML=list.slice(0,120).map(r=>'<tr><td><strong>'+esc(r.company)+'</strong><small>'+esc(r.contact||"")+'</small></td><td>'+esc(r.sector||"Sin clasificar")+'</td><td>'+esc(r.stage||"Prospecto")+'</td><td>'+esc(r.source||"Manual")+'</td><td>'+esc(r.nextDate||"No programada")+'</td><td><button data-crm-edit="'+esc(r.id)+'">'+(r.derived?"Completar":"Editar")+'</button></td></tr>').join("")||'<tr><td colspan="6">No hay empresas para los filtros seleccionados.</td></tr>';
  $("crmRealCount").textContent=list.length>120?"Mostrando 120 de "+list.length+" empresas":"Mostrando "+list.length+" empresas";
+ if(window.CorpartesCRMPlaybooks)window.CorpartesCRMPlaybooks.refresh();
 }
 function showForm(row){
  if(!canCRM())return;
@@ -92,7 +93,7 @@ function save(e){
  const obj={id:old?.id||("crm-"+Date.now()+"-"+Math.random().toString(36).slice(2,7)),company,
   sector:get("sector"),stage:get("stage"),source:get("source"),contact:get("contact"),email:get("email"),
   phone:get("phone"),assigned:get("assigned"),amount:Number(get("amount")||0),nextDate:get("nextDate"),
-  notes:get("notes"),createdAt:old?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};
+  notes:get("notes"),doNotContact:Boolean(old?.doNotContact),createdAt:old?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};
  if(index<0)data.push(obj);else data[index]=obj;
  if(typeof saveData==="function")saveData();
  $("crmRealEditor").classList.add("hidden");editId="";render();
@@ -104,6 +105,7 @@ function mount(){
  const style=document.createElement("style");style.textContent=css();document.head.appendChild(style);
  const holder=document.createElement("div");holder.innerHTML=markup();
  document.querySelector(".main-content").appendChild(holder.firstElementChild);
+ const playbookScript=document.createElement("script");playbookScript.src="/corpartes-crm-playbooks-v1.js";playbookScript.async=true;document.head.appendChild(playbookScript);
  const b=document.createElement("button");b.className="nav-button economic-only";b.type="button";b.dataset.module="crm";
  b.innerHTML='<span class="nav-icon">◈</span><span class="nav-copy"><strong>CRM Comercial</strong><small>Prospectos y oportunidades</small></span>';
  const quote=document.querySelector('.main-nav [data-module="cotizaciones"]');
