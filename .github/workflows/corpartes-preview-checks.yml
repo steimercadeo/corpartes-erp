@@ -33,5 +33,7 @@ jobs:
           node --check corpartes-os-v2.js
           node --check corpartes-enterprise-v3.js
           node --check corpartes-manufacturing-v4.js
+      - name: Comprobar pantalla de demostración y HTML principal
+        run: node --test tests/demo-preview.test.js
       - name: Pruebas de seguridad de autenticación
         run: node --test tests/*.test.js
