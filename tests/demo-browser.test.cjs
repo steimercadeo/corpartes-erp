@@ -40,6 +40,7 @@ test("DEMO muestra módulos y permite navegar a Atlas, aprendizajes y chat",asyn
  await page.waitForFunction(()=>document.querySelector("#demoModulesReady")?.textContent?.includes("7 de 7"),null,{timeout:25000});
  assert.match(await page.locator("#demoModulesReady").textContent(),/7 de 7/);
  const frame=page.frameLocator("#demoFrame");
+ await frame.locator("#module-control").waitFor({state:"visible",timeout:10000});
  await page.locator('[data-demo-module="atlas"]').click();
  await frame.locator("#module-atlas").waitFor({state:"visible",timeout:10000});
  assert.match(await frame.locator("#module-atlas").innerText(),/Importar CRM Atlas/);
