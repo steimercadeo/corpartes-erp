@@ -24,7 +24,7 @@ test("La demo no expone credenciales genéricas en el login real",()=>{
   assert.ok(!html.includes('const USER="DEMO",PASSWORD="Corpartes2026!"'));
 });
 test("La demo está aislada de Firebase y del origen de datos reales",()=>{
-  assert.match(demo,/sandbox="allow-scripts allow-modals allow-downloads"/);
+  assert.match(demo,/sandbox="allow-scripts allow-forms allow-modals allow-downloads"/);
   assert.ok(!demo.includes("allow-same-origin"));
   assert.match(demo,/Firebase deshabilitado: demo aislada/);
   assert.match(demo,/state\.data=seedData\(\)/);
