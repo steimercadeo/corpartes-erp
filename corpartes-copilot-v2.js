@@ -61,7 +61,29 @@ function suggestQuestion(){
   }
 }
 async function askReal(question){
-  const out=await callApi("/api/assistant",{question});
+  const q=String(question||"").trim();
+  const key=q.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  const isCommand=!/^(como|que|cual|cuando|explicame|ayudame|por que|dime)/.test(key) &&
+    /\b(crea|crear|agenda|agendar|programa|programar|registra|registrar|anota|hazme)\b/.test(key) &&
+    /\b(seguimiento|gestion|tarea|llamada|contacto)\b/.test(key);
+  if(isCommand){
+    const planned=await callApi("/api/plan",{instruction:q});
+    if(planned.kind==="clarification")return "Aún no se creó nada. "+planned.message;
+    if(planned.kind==="proposal"&&planned.proposal){
+      if(typeof openModule==="function")openModule("ai");
+      const a=planned.proposal;
+      $("cp2Company").value=a.company;
+      $("cp2Subject").value=a.subject;
+      $("cp2Due").value=a.dueDate;
+      $("cp2Note").value=a.note||"";
+      taskPreview({preventDefault:function(){}});
+      if(!pending)return "La propuesta se pudo preparar, pero no cumple los controles de la interfaz. No se guardó nada.";
+      $("cp2Pending").scrollIntoView({behavior:"smooth",block:"nearest"});
+      return "He preparado un borrador de seguimiento comercial para "+a.company+" ("+a.dueDate+"). No se ha ejecutado todavía. Revisa el recuadro «Nueva gestión comercial» y pulsa «Confirmar y crear gestión» sólo si todo está correcto.";
+    }
+    return "No pude preparar una acción segura. No se ejecutó ningún cambio.";
+  }
+  const out=await callApi("/api/assistant",{question:q});
   return out.answer+"\n\n[IA conectada · muestra limitada de datos del servidor. Solo lectura.]";
 }
 function taskPreview(ev){
@@ -133,7 +155,7 @@ return '<section class="cp2-shell"><header class="cp2-head"><div><small>PRODUCTI
   '<div id="cp2Pending" class="cp2-pending" hidden></div><div id="cp2TaskStatus" class="cp2-task-status"></div>'+
   '<div class="cp2-latest"><div class="cp2-panel-title"><h4>Gestiones recientes</h4><button id="cp2Reload" type="button">Actualizar</button></div>'+
   '<div id="cp2Tasks"><p>Inicia sesión para consultarlas.</p></div></div></div></div>'+
-  '<p class="cp2-disclaimer">La IA conversacional es de solo lectura. Las gestiones son acciones separadas que requieren confirmación, permisos, registro de auditoría y servidor conectado. Contabilidad, DIAN y envíos de correo/WhatsApp no están habilitados todavía.</p></section>';
+  '<p class="cp2-disclaimer">La IA conversacional es de solo lectura. Las gestiones son acciones separadas que requieren confirmación, permisos, registro de auditoría y servidor conectado. Puedes escribir «Crea un seguimiento para HMV mañana: llamar por la cotización» en el chat de IA; la propuesta requerirá confirmación. Contabilidad, DIAN y envíos de correo/WhatsApp no están habilitados todavía.</p></section>';
 }
 function styles(){
 return '.cp2-shell{margin:16px 0 24px;border-radius:19px;padding:17px;background:#eef5fc;border:1px solid #c8dceb}'+

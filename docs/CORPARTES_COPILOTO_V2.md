@@ -107,3 +107,11 @@ https://vercel.com/docs/ai-gateway/authentication-and-byok
 https://firebase.google.com/docs/auth/admin/verify-id-tokens
 https://micrositios.dian.gov.co/sistema-de-facturacion-electronica/requerimientos-para-ser-facturador-electronico/
 https://worldoffice.com.co/
+
+## Planificación de acciones por lenguaje natural (añadido)
+
+- `POST /api/plan`: interpreta **únicamente** solicitudes de crear seguimientos comerciales, verificando antes Firebase Auth y membresía propietaria. El modelo **sólo prepara JSON**; no tiene herramientas de escritura.
+- Si faltan empresa, actividad o fecha, pide aclaración. Todas las propuestas se validan en servidor, pasan a la ficha del copiloto y requieren clic explícito de confirmación.
+- `POST /api/actions` valida por segunda vez la acción y la ejecuta con transacción y auditoría. El modelo nunca decide el permiso.
+- Prueba conversacional futura cuando esté configurado el modelo: «Crea un seguimiento para HMV mañana: llamar para revisar la cotización».
+- No equivale a una automatización programada ni envía notificaciones: crea una gestión pendiente en Firestore. Se añadirán calendarios y recordatorios en una fase posterior.
