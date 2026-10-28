@@ -21,10 +21,10 @@ button{padding:12px 15px;border:0;border-radius:9px;background:#165e92;color:#ff
 .card button{width:100%;margin-top:8px}
 #err{color:#bc2135;min-height:20px}
 #work{display:none}
-#demoFrame{border:0;width:100%;height:calc(100vh - 60px);background:#fff}
+#demoFrame{border:0;width:100%;height:calc(100vh - 145px);background:#fff}#demoQuickNav button{background:#e4eff8;color:#164b75;font-size:11px;padding:8px 11px;border:1px solid #cde2f4}#demoQuickNav button:hover{background:#145d88;color:#fff}
 .notice{font-size:12px;color:#ffe7aa}
 #exit{display:none;background:#fff;color:#16385b}
-@media(max-width:680px){header{padding:10px 13px}#demoFrame{height:calc(100vh - 93px)}}
+@media(max-width:680px){header{padding:10px 13px}#demoFrame{height:calc(100vh - 205px)}}
 </style>
 </head>
 <body>
@@ -41,7 +41,20 @@ button{padding:12px 15px;border:0;border-radius:9px;background:#165e92;color:#ff
       <p role="alert" id="err"></p>
     </form>
   </section>
-  <section id="work"><iframe id="demoFrame" title="CORPARTES ERP, demo aislada" sandbox="allow-scripts allow-modals allow-downloads" referrerpolicy="no-referrer"></iframe></section>
+  <section id="work">
+ <nav id="demoQuickNav" aria-label="Nuevos módulos de Corpartes" style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;padding:12px;background:#fff;border-bottom:2px solid #bad6eb">
+  <strong style="font-size:12px;margin-right:5px">NUEVO EN CORPARTES OS</strong>
+  <button type="button" data-demo-module="control">Centro de Control</button>
+  <button type="button" data-demo-module="atlas">Atlas 360</button>
+  <button type="button" data-demo-module="mercadeo">Mercadeo</button>
+  <button type="button" data-demo-module="logistica">Logística</button>
+  <button type="button" data-demo-module="fiscal">Colombia / DIAN</button>
+  <button type="button" data-demo-module="conocimiento">Aprendizajes IA</button>
+  <button type="button" data-demo-module="ai">IA + Chat interno</button>
+  <span id="demoModulesReady" style="font-size:11px;color:#5a6b7c">Preparando módulos…</span>
+ </nav>
+ <iframe id="demoFrame" title="CORPARTES ERP, demo aislada" sandbox="allow-scripts allow-modals allow-downloads" referrerpolicy="no-referrer"></iframe>
+ </section>
 </main>
 <script>
 /* Este acceso nunca autentica usuarios reales. La clave es pública y no protege datos. */
@@ -62,6 +75,21 @@ button{padding:12px 15px;border:0;border-radius:9px;background:#165e92;color:#ff
     "    setCloudStatus('offline','Demo: datos de ejemplo');\n"+
     "    showApp();return;\n"+
     "  }\n  loadData();";
+  const neededModules=["corpartes-ai-v1.js","corpartes-crm-v1.js","corpartes-os-v2.js",
+    "corpartes-enterprise-v3.js","corpartes-manufacturing-v4.js",
+    "corpartes-crm-playbooks-v1.js","corpartes-operations-v5.js","corpartes-knowledge-v6.js"];
+  async function getModules(){
+    const rows=await Promise.all(neededModules.map(async function(name){
+      const res=await fetch("/"+name,{cache:"no-store",credentials:"same-origin"});
+      if(!res.ok)throw new Error("No se pudo cargar "+name+" (HTTP "+res.status+").");
+      return [name,await res.text()];
+    }));
+    return Object.fromEntries(rows);
+  }
+  function inlineJs(code){
+    // Evita que un cierre de script dentro del archivo rompa el iframe.
+    return "<script>"+code.replaceAll("</"+"script","<\\/"+"script")+"<\/script>";
+  }
   const demoHead='<base href="/">\n'+
     '<script>window.__CORPARTES_OFFLINE_DEMO__=true;'+
     'window.fetch=(function(orig){return function(input,options){'+
@@ -69,7 +97,7 @@ button{padding:12px 15px;border:0;border-radius:9px;background:#165e92;color:#ff
     'if(method!=="GET"&&method!=="HEAD")return Promise.reject(new Error("Demo: no hay envíos ni escritura remota"));'+
     'return orig.apply(this,arguments);};})(window.fetch);'+
     '<\/script>';
-  function transformOriginal(html){
+  function transformOriginal(html,modules){
     if(!html.includes('id="loginView"')||!html.includes(originalInit)||!html.includes('<\/head>')){
       throw new Error("El archivo principal del ERP cambió o no pudo cargarse.");
     }
@@ -78,6 +106,11 @@ button{padding:12px 15px;border:0;border-radius:9px;background:#165e92;color:#ff
     if(!firebaseBlock.test(html))throw new Error("No se pudo aislar Firebase del ERP.");
     html=html.replace(firebaseBlock,"<!-- Firebase deshabilitado: demo aislada -->");
     html=html.replace(originalInit,demoInit);
+    for(const name of neededModules.slice(0,5)){
+      const tag='<script src="./'+name+'"><\/script>';
+      if(!html.includes(tag))throw new Error("Falta módulo original "+name);
+      html=html.replace(tag,inlineJs(modules[name]));
+    }
     // La demo no guarda en las claves localStorage usadas por el ERP real.
     html=html.replace("function saveData() {\n", "function saveData() {\n  if(window.__CORPARTES_OFFLINE_DEMO__)return;\n");
     html=html.replace("function backupLocalData() {\n", "function backupLocalData() {\n  if(window.__CORPARTES_OFFLINE_DEMO__)return;\n");
@@ -86,8 +119,31 @@ button{padding:12px 15px;border:0;border-radius:9px;background:#165e92;color:#ff
     // El archivo arrastra scripts de feedback tras el cierre HTML; no incluirlos en la vista.
     const lastClose=html.lastIndexOf("</html>");
     if(lastClose!==-1)html=html.slice(0,lastClose+7);
+    const extra=["corpartes-crm-playbooks-v1.js","corpartes-operations-v5.js","corpartes-knowledge-v6.js"]
+      .map(function(name){return inlineJs(modules[name]);}).join("\n");
+    const handshake=inlineJs("(function(){window.addEventListener('message',function(e){"+
+      "if(e.source!==window.parent||!e.data||e.data.kind!=='corpartes-demo-open')return;"+
+      "var id=String(e.data.module||'');if(!/^(control|atlas|mercadeo|logistica|fiscal|conocimiento|ai|crm|compras|contabilidad)$/.test(id))return;"+
+      "if(typeof openModule==='function')openModule(id);"+
+      "});window.addEventListener('load',function(){var ids=['control','atlas','mercadeo','logistica','fiscal','conocimiento','ai'];"+
+      "window.parent.postMessage({kind:'corpartes-demo-loaded',visible:ids.filter(function(k){return !!document.getElementById('module-'+k)})},'*');"+
+      "});})();");
+    const endBody=html.lastIndexOf("</body>");
+    if(endBody<0)throw new Error("No se encontró cierre del ERP.");
+    html=html.slice(0,endBody)+extra+"\n"+handshake+"\n"+html.slice(endBody);
     return html;
   }
+  document.getElementById("demoQuickNav").addEventListener("click",function(ev){
+    const b=ev.target.closest("[data-demo-module]");
+    if(!b||!frame.contentWindow)return;
+    frame.contentWindow.postMessage({kind:"corpartes-demo-open",module:b.dataset.demoModule},"*");
+  });
+  window.addEventListener("message",function(ev){
+    if(ev.source!==frame.contentWindow||!ev.data||ev.data.kind!=="corpartes-demo-loaded")return;
+    const found=ev.data.visible||[];
+    document.getElementById("demoModulesReady").textContent=found.length+" de 7 módulos de revisión cargados";
+    document.getElementById("demoModulesReady").style.color=found.length===7?"#138253":"#9b4c16";
+  });
   login.addEventListener("submit",async function(event){
     event.preventDefault();
     if(document.getElementById("demoUser").value.trim().toUpperCase()!==USER ||
@@ -99,8 +155,8 @@ button{padding:12px 15px;border:0;border-radius:9px;background:#165e92;color:#ff
     try{
       const response=await fetch("/index.html",{cache:"no-store",credentials:"same-origin"});
       if(!response.ok)throw new Error("El servidor no permitió obtener el ERP (HTTP "+response.status+").");
-      const html=await response.text();
-      frame.srcdoc=transformOriginal(html);
+      const [html,modules]=await Promise.all([response.text(),getModules()]);
+      frame.srcdoc=transformOriginal(html,modules);
       document.getElementById("access").style.display="none";
       document.getElementById("work").style.display="block";
       document.getElementById("exit").style.display="block";
