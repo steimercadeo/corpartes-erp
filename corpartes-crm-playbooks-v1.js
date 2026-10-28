@@ -146,6 +146,10 @@
       if (event.target.id !== "cpPlaybookOptOut") return;
       const row = getRecords().find(r => r.id === $("cpPlaybookCompany").value);
       if (!row) return;
+      if (row.doNotContact === true && !event.target.checked) {
+        alert("La exclusión no puede revertirse desde el generador de borradores. Verifica y documenta una nueva autorización antes de modificarla.");
+        refresh();return;
+      }
       row.doNotContact = event.target.checked;
       row.updatedAt = new Date().toISOString();
       if (typeof window.saveData === "function") window.saveData();
