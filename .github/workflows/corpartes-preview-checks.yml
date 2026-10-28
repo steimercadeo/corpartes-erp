@@ -1,0 +1,36 @@
+name: Validación ERP-CRM (sin despliegue)
+on:
+  push:
+    branches:
+      - "corpartes-dev-*"
+  pull_request:
+    paths:
+      - "api/**"
+      - "*.js"
+      - "tests/**"
+      - ".github/workflows/corpartes-preview-checks.yml"
+permissions:
+  contents: read
+jobs:
+  comprobar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener código
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Preparar Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "24"
+      - name: Validar sintaxis del código modular
+        run: |
+          node --check api/_firebase-auth.js
+          node --check api/ai.js
+          node --check corpartes-ai-v1.js
+          node --check corpartes-crm-v1.js
+          node --check corpartes-os-v2.js
+          node --check corpartes-enterprise-v3.js
+          node --check corpartes-manufacturing-v4.js
+      - name: Pruebas de seguridad de autenticación
+        run: node --test tests/ai-auth.test.js
