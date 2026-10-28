@@ -92,6 +92,7 @@ button{padding:12px 15px;border:0;border-radius:9px;background:#165e92;color:#ff
   }
   const demoHead='<base href="/">\n'+
     '<script>window.__CORPARTES_OFFLINE_DEMO__=true;'+
+    'window.openEditOrder=function(){window.alert("La edición de pedidos reales no está disponible en DEMO.");};'+
     'window.fetch=(function(orig){return function(input,options){'+
     'var method=String(options&&options.method||input&&input.method||"GET").toUpperCase();'+
     'if(method!=="GET"&&method!=="HEAD")return Promise.reject(new Error("Demo: no hay envíos ni escritura remota"));'+
@@ -106,6 +107,14 @@ button{padding:12px 15px;border:0;border-radius:9px;background:#165e92;color:#ff
     if(!firebaseBlock.test(html))throw new Error("No se pudo aislar Firebase del ERP.");
     html=html.replace(firebaseBlock,"<!-- Firebase deshabilitado: demo aislada -->");
     html=html.replace(originalInit,demoInit);
+    // Inicialización anticipada de datos ficticios antes de listeners heredados.
+    html=html.replace('const $ = (id) => document.getElementById(id);',
+      'if(window.__CORPARTES_OFFLINE_DEMO__)state.data=seedData();\nconst $ = (id) => document.getElementById(id);');
+    html=html.replace('if(!("serviceWorker" in navigator)) return;',
+      'if(window.__CORPARTES_OFFLINE_DEMO__||!("serviceWorker" in navigator)) return;');
+    html=html.replace('if ("serviceWorker" in navigator && location.protocol !== "file:")',
+      'if (!window.__CORPARTES_OFFLINE_DEMO__ && "serviceWorker" in navigator && location.protocol !== "file:")');
+
     // Sin Service Worker dentro de un iframe de origen opaco (evita SecurityError).
     html=html.replace('if("serviceWorker" in navigator&&location.protocol!=="file:"){','if(!window.__CORPARTES_OFFLINE_DEMO__ && "serviceWorker" in navigator&&location.protocol!=="file:"){');
     for(const name of neededModules.slice(0,5)){
