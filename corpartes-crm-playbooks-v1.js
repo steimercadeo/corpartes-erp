@@ -150,9 +150,12 @@
         alert("La exclusión no puede revertirse desde el generador de borradores. Verifica y documenta una nueva autorización antes de modificarla.");
         refresh();return;
       }
+      const persist = typeof saveData === "function" ? saveData : window.saveData;
+      if (typeof persist !== "function") { alert("No hay guardado disponible. No se cambió la preferencia.");refresh();return; }
+      const previous = row.doNotContact;
       row.doNotContact = event.target.checked;
       row.updatedAt = new Date().toISOString();
-      if (typeof window.saveData === "function") window.saveData();
+      try { persist(); } catch (_) {row.doNotContact = previous;alert("No fue posible guardar la exclusión.");}
       refresh();
     });
     mounted = true;
