@@ -1,0 +1,12 @@
+{
+  "name": "corpartes-erp",
+  "version": "2.0.0",
+  "private": true,
+  "description": "CORPARTES ERP static frontend and secure API",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.5.0"
+  }
+}

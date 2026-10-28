@@ -29,6 +29,16 @@ service cloud.firestore {
       ];
     }
 
+    // Tareas y auditoría: escrituras exclusivamente desde la API administrativa.
+    match /corpartes_crm_tasks/{taskId} {
+      allow read: if isOwner();
+      allow create, update, delete: if false;
+    }
+    match /corpartes_audit/{eventId} {
+      allow read: if isOwner();
+      allow create, update, delete: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }

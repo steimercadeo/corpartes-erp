@@ -1,4 +1,4 @@
-/* CORPARTES AI OS · BETA 1 · 2026-10-27
+/* CORPARTES AI OS · COPILOTO V2 · 2026-10-27
    Primer cerebro empresarial conectado al estado real del ERP.
    - Centro de decisiones
    - Indicadores explicables
@@ -306,9 +306,16 @@
     var q = String(question || "").trim();
     if(!q) return;
     addAiMessage("user",q);
-    window.setTimeout(function(){
-      addAiMessage("assistant",answerQuestion(q));
-    },120);
+    if(window.CorpartesCopilot && typeof window.CorpartesCopilot.askReal === "function"){
+      addAiMessage("assistant","Consultando el servidor seguro de Corpartes…");
+      window.CorpartesCopilot.askReal(q).then(function(answer){
+        if(aiMessages.length && aiMessages[aiMessages.length-1].text==="Consultando el servidor seguro de Corpartes…") aiMessages.pop();
+        addAiMessage("assistant",answer);
+      }).catch(function(error){
+        if(aiMessages.length && aiMessages[aiMessages.length-1].text==="Consultando el servidor seguro de Corpartes…") aiMessages.pop();
+        addAiMessage("assistant","Modo local (IA externa no conectada: "+String(error.message||"servicio no disponible")+").\n"+answerQuestion(q));
+      });
+    }else addAiMessage("assistant","Modo local: "+answerQuestion(q));
   }
 
   function ensureCompanyChat(){
@@ -389,7 +396,7 @@
         '<div id="cpaiAssistantPanel" class="cpai-card cpai-chat">'+
           '<div id="cpaiConversation" class="cpai-conversation"></div>'+
           '<form id="cpaiAskForm" class="cpai-composer"><input id="cpaiAskInput" autocomplete="off" placeholder="Pregúntale a Corpartes IA: ¿qué debería preocuparme hoy?"><button type="submit">Preguntar ✦</button></form>'+
-          '<div class="cpai-source-note">Las respuestas de esta Beta se calculan con registros del ERP. No inventa cifras. La próxima capa conectará IA generativa y acciones autorizadas.</div>'+
+          '<div class="cpai-source-note">IA generativa solo si existe servidor seguro; de lo contrario, respuestas locales identificadas. Consultar no ejecuta cambios.</div>'+
         '</div>'+
         '<div id="cpaiCompanyPanel" class="cpai-card cpai-company hidden">'+
           '<div class="cpai-company-top"><div><span class="cpai-eyebrow">COLABORACIÓN</span><h3>Chat interno de la empresa</h3><p>Conversaciones guardadas junto con el ERP y sincronizadas por la misma nube.</p></div>'+
