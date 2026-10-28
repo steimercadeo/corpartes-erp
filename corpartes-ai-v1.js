@@ -222,6 +222,10 @@
 
   function answerQuestion(question){
     var q = String(question || "").trim();
+    if(window.CorpartesKnowledge && typeof window.CorpartesKnowledge.answer==="function"){
+      var documented=window.CorpartesKnowledge.answer(q);
+      if(documented)return documented;
+    }
     var k = q.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
     var s = summary();
     var risks = riskOrders();
@@ -389,7 +393,7 @@
         '<div id="cpaiAssistantPanel" class="cpai-card cpai-chat">'+
           '<div id="cpaiConversation" class="cpai-conversation"></div>'+
           '<form id="cpaiAskForm" class="cpai-composer"><input id="cpaiAskInput" autocomplete="off" placeholder="Pregúntale a Corpartes IA: ¿qué debería preocuparme hoy?"><button type="submit">Preguntar ✦</button></form>'+
-          '<div class="cpai-source-note">Las respuestas de esta Beta se calculan con registros del ERP. No inventa cifras. La próxima capa conectará IA generativa y acciones autorizadas.</div>'+
+          '<div class="cpai-source-note">Respuestas locales basadas en registros del ERP o conocimientos documentados. En DEMO todo es ilustrativo; IA en nube, aprendizaje permanente y acciones autorizadas requieren servicios configurados.</div>'+
         '</div>'+
         '<div id="cpaiCompanyPanel" class="cpai-card cpai-company hidden">'+
           '<div class="cpai-company-top"><div><span class="cpai-eyebrow">COLABORACIÓN</span><h3>Chat interno de la empresa</h3><p>Conversaciones guardadas junto con el ERP y sincronizadas por la misma nube.</p></div>'+
