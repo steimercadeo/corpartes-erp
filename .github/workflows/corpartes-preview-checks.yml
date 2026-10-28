@@ -33,7 +33,16 @@ jobs:
           node --check corpartes-os-v2.js
           node --check corpartes-enterprise-v3.js
           node --check corpartes-manufacturing-v4.js
+          node --check corpartes-operations-v5.js
+          node --check corpartes-knowledge-v6.js
       - name: Comprobar pantalla de demostración y HTML principal
         run: node --test tests/demo-preview.test.js
       - name: Pruebas de seguridad de autenticación
         run: node --test tests/*.test.js
+      - name: Instalar navegador de pruebas
+        run: npm install --no-save --no-package-lock playwright-core@1.56.1
+      - name: Revisar módulos visibles y chat en Chromium
+        run: |
+          export CHROME_PATH="$(which google-chrome || which chromium || true)"
+          test -n "$CHROME_PATH"
+          node --test tests/demo-browser.test.cjs
