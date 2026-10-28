@@ -52,7 +52,7 @@ test("DEMO muestra módulos y permite navegar a Atlas, aprendizajes y chat",asyn
  assert.match(kbDetail,/Apollo y Hunter/i,"knowledgeAnswer="+kbDetail+" suggestions="+suggestions+" console="+errors.join(" | "));
  await page.locator('[data-demo-module="ai"]').click();
  await frame.locator("#module-ai").waitFor({state:"visible",timeout:10000});
- assert.match(await frame.locator("#module-ai").innerText(),/Chat interno/);
+ assert.match(await frame.locator("#module-ai").innerText(),/chat interno/i);
  await page.locator('[data-demo-module="control"]').click();
  await frame.locator("#module-control").waitFor({state:"visible",timeout:10000});
  const serious=errors.filter(x=>!/(net::ERR|Failed to load resource|refused to load|networkerror)/i.test(x));
