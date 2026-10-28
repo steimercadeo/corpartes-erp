@@ -29,8 +29,9 @@ jobs:
           node --check api/ai.js
           node --check corpartes-ai-v1.js
           node --check corpartes-crm-v1.js
+          node --check corpartes-crm-playbooks-v1.js
           node --check corpartes-os-v2.js
           node --check corpartes-enterprise-v3.js
           node --check corpartes-manufacturing-v4.js
       - name: Pruebas de seguridad de autenticación
-        run: node --test tests/ai-auth.test.js
+        run: node --test tests/*.test.js
