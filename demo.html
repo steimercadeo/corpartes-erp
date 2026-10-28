@@ -77,6 +77,10 @@ button{padding:12px 15px;border:0;border-radius:9px;background:#165e92;color:#ff
     const firebaseBlock=/<script>\/\* CORPARTES ERP V0\.2\.1 · Firebase bundle embebido para apertura local \*\/[\s\S]*?<\/script>/;
     if(!firebaseBlock.test(html))throw new Error("No se pudo aislar Firebase del ERP.");
     html=html.replace(firebaseBlock,"<!-- Firebase deshabilitado: demo aislada -->");
+    // Reparación del HTML histórico: etiquetas cargadas accidentalmente dentro de una plantilla de impresión.
+    const brokenPrint='<script src="./corpartes-ai-v1.js"></script>\n<script src="./corpartes-crm-v1.js"></script>\n</body></html>`);';
+    if(!html.includes(brokenPrint))throw new Error("El formato principal del ERP cambió: revisar plantilla de impresión.");
+    html=html.replace(brokenPrint,'</body></html>`);');
     html=html.replace(originalInit,demoInit);
     // La demo no guarda en las claves localStorage usadas por el ERP real.
     html=html.replace("function saveData() {\n", "function saveData() {\n  if(window.__CORPARTES_OFFLINE_DEMO__)return;\n");
