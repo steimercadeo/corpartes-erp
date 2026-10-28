@@ -73,7 +73,7 @@ button{padding:12px 15px;border:0;border-radius:9px;background:#165e92;color:#ff
     "    state.currentUser=state.data.users.find(u=>u.code==='ADM01');\n"+
     "    nativeCloudReady=false;\n"+
     "    setCloudStatus('offline','Demo: datos de ejemplo');\n"+
-    "    showApp();return;\n"+
+    "    showApp();setTimeout(function(){try{openModule('control');}catch(_e){}},650);return;\n"+
     "  }\n  loadData();";
   const neededModules=["corpartes-ai-v1.js","corpartes-crm-v1.js","corpartes-os-v2.js",
     "corpartes-enterprise-v3.js","corpartes-manufacturing-v4.js",
