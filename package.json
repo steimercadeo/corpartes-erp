@@ -4,7 +4,7 @@
   "private": true,
   "description": "CORPARTES ERP static frontend and secure API",
   "engines": {
-    "node": ">=22"
+    "node": "22.x"
   },
   "dependencies": {
     "firebase-admin": "^13.5.0"

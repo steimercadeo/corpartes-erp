@@ -22,7 +22,10 @@ module.exports=async function handler(req,res){
        !/^\d{4}-\d{2}-\d{2}$/.test(dueDate))
       return json(res,400,{error:"Completa empresa, actividad, fecha e identificador válido."});
     const d=new Date(dueDate+"T12:00:00Z");
-    const today=new Date();today.setUTCHours(0,0,0,0);
+    const parts=Object.fromEntries(new Intl.DateTimeFormat("en-US",{
+      timeZone:"America/Bogota",year:"numeric",month:"2-digit",day:"2-digit"
+    }).formatToParts(new Date()).filter(p=>p.type!=="literal").map(p=>[p.type,p.value]));
+    const today=new Date(parts.year+"-"+parts.month+"-"+parts.day+"T12:00:00Z");
     if(!Number.isFinite(d.getTime())||d.toISOString().slice(0,10)!==dueDate||
        d.getTime()<today.getTime()||d.getTime()>today.getTime()+86400000*1095)
       return json(res,400,{error:"La fecha debe ser válida, futura o de hoy y dentro de 3 años."});
