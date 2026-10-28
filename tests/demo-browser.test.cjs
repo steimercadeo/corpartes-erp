@@ -47,7 +47,9 @@ test("DEMO muestra módulos y permite navegar a Atlas, aprendizajes y chat",asyn
  await frame.locator("#module-conocimiento").waitFor({state:"visible",timeout:10000});
  await frame.locator("#cpkbQuestion").fill("¿Cómo integraremos Apollo y Hunter?");
  await frame.locator("#cpkbForm button").click();
- assert.match(await frame.locator("#cpkbAnswer").innerText(),/Apollo y Hunter/i);
+ const kbDetail=await frame.locator("#cpkbAnswer").innerText();
+ const suggestions=await frame.locator("#cpkbSuggest button").count();
+ assert.match(kbDetail,/Apollo y Hunter/i,"knowledgeAnswer="+kbDetail+" suggestions="+suggestions+" console="+errors.join(" | "));
  await page.locator('[data-demo-module="ai"]').click();
  await frame.locator("#module-ai").waitFor({state:"visible",timeout:10000});
  assert.match(await frame.locator("#module-ai").innerText(),/Chat interno/);
