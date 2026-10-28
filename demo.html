@@ -125,7 +125,7 @@ button{padding:12px 15px;border:0;border-radius:9px;background:#165e92;color:#ff
       "if(e.source!==window.parent||!e.data||e.data.kind!=='corpartes-demo-open')return;"+
       "var id=String(e.data.module||'');if(!/^(control|atlas|mercadeo|logistica|fiscal|conocimiento|ai|crm|compras|contabilidad)$/.test(id))return;"+
       "if(typeof openModule==='function')openModule(id);"+
-      "});window.addEventListener('load',function(){var ids=['control','atlas','mercadeo','logistica','fiscal','conocimiento','ai'];"+
+      "});document.addEventListener('DOMContentLoaded',function(){var ids=['control','atlas','mercadeo','logistica','fiscal','conocimiento','ai'];"+
       "window.parent.postMessage({kind:'corpartes-demo-loaded',visible:ids.filter(function(k){return !!document.getElementById('module-'+k)})},'*');"+
       "});})();");
     const endBody=html.lastIndexOf("</body>");
