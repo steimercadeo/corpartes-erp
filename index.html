@@ -6291,8 +6291,6 @@ function openOptimizedPrintWindow({title="Informe ESS",html="",landscape=true}){
 <!-- ESS V2.5.4C - PROGRAMACION_ID GLOBAL -->
 
 <!-- ESS V2.5.4D - RETIRAR BOTON PROCESOS LISTADO -->
-<script src="./corpartes-ai-v1.js"></script>
-<script src="./corpartes-crm-v1.js"></script>
 </body></html>`);
   w.document.close();
   waitForPrintAssets(w.document).finally(()=>{
@@ -28933,6 +28931,11 @@ window.v705RunInQuotationScope((function(){
   }
   document.addEventListener("DOMContentLoaded",()=>setTimeout(renderComplianceByAreaCorpartes,0));
 })();
-</script></body>
+</script>
+<!-- CORPARTES: CRM, IA y Copiloto cargados en el DOCUMENTO PRINCIPAL; no en la impresión -->
+<script src="./corpartes-ai-v1.js"></script>
+<script src="./corpartes-crm-v1.js"></script>
+<script src="./corpartes-copiloto-v2.js"></script>
+</body>
 </html>
 <script async data-explicit-opt-in="true" data-deployment-id="dpl_3tDaW9R5ayughiQjaEUPkB7F6tc3" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_J8h6T3MuydKAtsp5sqFWK6wWnX4E" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_7jgXgRCzGm6PmeFwjX6qGg46WDqB" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_4wcjTNDVhnMTj4YUUcLFcP4gRy9t" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_72zXoHmnANGAnh5sHJ5uxGdEjz3r" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_FEkuVM5FtcErDYQ2oUAiYJcAQDop" src="https://vercel.live/_next-live/feedback/feedback.js"></script><script async data-explicit-opt-in="true" data-deployment-id="dpl_EDDKwyxMPMmjzLSD7rHew7CfWZ9t" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
