@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>CORPARTES ERP–CRM | Vista de pruebas aislada</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#eef3f8;font-family:Arial,Helvetica,sans-serif;color:#153657}
+header{padding:13px 22px;background:#112f51;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header strong{font-size:15px}
+header span{font-size:12px;color:#d3e7f6}
+main{min-height:calc(100vh - 58px)}
+#access{min-height:calc(100vh - 58px);display:grid;place-items:center;padding:25px}
+.card{width:min(420px,100%);background:#fff;padding:26px;border-radius:18px;box-shadow:0 20px 55px #16355722}
+h1{font-size:27px;margin:7px 0 8px}p{font-size:13px;line-height:1.55;color:#64748b}
+label{display:block;margin:13px 0;font-size:12px;font-weight:700}
+input{display:block;width:100%;padding:12px;margin-top:5px;border:1px solid #cbd5e1;border-radius:9px;font:inherit}
+button{padding:12px 15px;border:0;border-radius:9px;background:#165e92;color:#fff;font-weight:800;cursor:pointer}
+.card button{width:100%;margin-top:8px}
+#err{color:#bc2135;min-height:20px}
+#work{display:none}
+#demoFrame{border:0;width:100%;height:calc(100vh - 60px);background:#fff}
+.notice{font-size:12px;color:#ffe7aa}
+#exit{display:none;background:#fff;color:#16385b}
+@media(max-width:680px){header{padding:10px 13px}#demoFrame{height:calc(100vh - 93px)}}
+</style>
+</head>
+<body>
+<header><div><strong>CORPARTES ERP–CRM · DEMO</strong><div><span>Entorno aislado · Datos de ejemplo · Sin Firebase y sin envío de mensajes</span></div></div><button id="exit" type="button">Salir de demo</button></header>
+<main>
+  <section id="access">
+    <form id="demoLogin" class="card">
+      <small>VISTA DE DESARROLLO</small>
+      <h1>Acceso de prueba</h1>
+      <p>Revisa las pantallas originales del ERP con registros de ejemplo. No se consultan ni modifican pedidos reales.</p>
+      <label>Usuario<input id="demoUser" autocomplete="off" required placeholder="DEMO"></label>
+      <label>Clave<input id="demoPassword" type="password" autocomplete="off" required placeholder="Clave de demostración"></label>
+      <button type="submit" id="enter">Ingresar al ERP de prueba</button>
+      <p role="alert" id="err"></p>
+    </form>
+  </section>
+  <section id="work"><iframe id="demoFrame" title="CORPARTES ERP, demo aislada" sandbox="allow-scripts allow-modals allow-downloads" referrerpolicy="no-referrer"></iframe></section>
+</main>
+<script>
+/* Este acceso nunca autentica usuarios reales. La clave es pública y no protege datos. */
+(function(){
+  "use strict";
+  const USER="DEMO",PASSWORD="Corpartes2026!";
+  const login=document.getElementById("demoLogin");
+  const error=document.getElementById("err"),frame=document.getElementById("demoFrame");
+  const button=document.getElementById("enter");
+  const originalInit="async function init(){\n  loadData();";
+  const demoInit="async function init(){\n"+
+    "  if(window.__CORPARTES_OFFLINE_DEMO__){\n"+
+    "    state.data=seedData();\n"+
+    "    ensureV15Data();\n"+
+    "    bindEvents();bindV15ExtraEvents();\n"+
+    "    state.currentUser=state.data.users.find(u=>u.code==='ADM01');\n"+
+    "    nativeCloudReady=false;\n"+
+    "    setCloudStatus('offline','Demo: datos de ejemplo');\n"+
+    "    showApp();return;\n"+
+    "  }\n  loadData();";
+  const demoHead='<base href="/">\n'+
+    '<script>window.__CORPARTES_OFFLINE_DEMO__=true;'+
+    'window.fetch=(function(orig){return function(input,options){'+
+    'var method=String(options&&options.method||input&&input.method||"GET").toUpperCase();'+
+    'if(method!=="GET"&&method!=="HEAD")return Promise.reject(new Error("Demo: no hay envíos ni escritura remota"));'+
+    'return orig.apply(this,arguments);};})(window.fetch);'+
+    '<\/script>';
+  function transformOriginal(html){
+    if(!html.includes('id="loginView"')||!html.includes(originalInit)||!html.includes('<\/head>')){
+      throw new Error("El archivo principal del ERP cambió o no pudo cargarse.");
+    }
+    // El bundle Firebase no se ejecuta en una demo con credenciales públicas.
+    const firebaseBlock=/<script>\/\* CORPARTES ERP V0\.2\.1 · Firebase bundle embebido para apertura local \*\/[\s\S]*?<\/script>/;
+    if(!firebaseBlock.test(html))throw new Error("No se pudo aislar Firebase del ERP.");
+    html=html.replace(firebaseBlock,"<!-- Firebase deshabilitado: demo aislada -->");
+    html=html.replace(originalInit,demoInit);
+    // La demo no guarda en las claves localStorage usadas por el ERP real.
+    html=html.replace("function saveData() {\n", "function saveData() {\n  if(window.__CORPARTES_OFFLINE_DEMO__)return;\n");
+    html=html.replace("function backupLocalData() {\n", "function backupLocalData() {\n  if(window.__CORPARTES_OFFLINE_DEMO__)return;\n");
+    // Se evita reutilizar almacenamiento o cookies del ERP por sandbox sin allow-same-origin.
+    html=html.replace("</head>",demoHead+"\n</head>");
+    // El archivo arrastra scripts de feedback tras el cierre HTML; no incluirlos en la vista.
+    const lastClose=html.lastIndexOf("</html>");
+    if(lastClose!==-1)html=html.slice(0,lastClose+7);
+    return html;
+  }
+  login.addEventListener("submit",async function(event){
+    event.preventDefault();
+    if(document.getElementById("demoUser").value.trim().toUpperCase()!==USER ||
+       document.getElementById("demoPassword").value!==PASSWORD){
+      error.textContent="Usuario o clave de demostración incorrectos.";return;
+    }
+    button.disabled=true;button.textContent="Abriendo el ERP...";
+    error.textContent="";
+    try{
+      const response=await fetch("/index.html",{cache:"no-store",credentials:"same-origin"});
+      if(!response.ok)throw new Error("El servidor no permitió obtener el ERP (HTTP "+response.status+").");
+      const html=await response.text();
+      frame.srcdoc=transformOriginal(html);
+      document.getElementById("access").style.display="none";
+      document.getElementById("work").style.display="block";
+      document.getElementById("exit").style.display="block";
+    }catch(ex){error.textContent=ex.message||"Error abriendo la demostración.";}
+    finally{button.disabled=false;button.textContent="Ingresar al ERP de prueba";}
+  });
+  document.getElementById("exit").addEventListener("click",function(){
+    frame.removeAttribute("srcdoc");frame.src="about:blank";
+    document.getElementById("work").style.display="none";
+    document.getElementById("access").style.display="";
+    document.getElementById("exit").style.display="none";
+    document.getElementById("demoPassword").value="";
+  });
+})();
+</script>
+</body>
+</html>
