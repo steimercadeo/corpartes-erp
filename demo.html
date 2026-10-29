@@ -49,6 +49,7 @@ button{padding:12px 15px;border:0;border-radius:9px;background:#165e92;color:#ff
   <button type="button" data-demo-module="mercadeo">Mercadeo</button>
   <button type="button" data-demo-module="logistica">Logística</button>
   <button type="button" data-demo-module="fiscal">Colombia / DIAN</button>
+  <button type="button" data-demo-module="automatizaciones" style="background:#125f86;color:white">⚡ Automation Studio V7</button>
   <button type="button" data-demo-module="conocimiento">Aprendizajes IA</button>
   <button type="button" data-demo-module="ai">IA + Chat interno</button>
   <span id="demoModulesReady" style="font-size:11px;color:#5a6b7c">Preparando módulos…</span>
@@ -77,7 +78,7 @@ button{padding:12px 15px;border:0;border-radius:9px;background:#165e92;color:#ff
     "  }\n  loadData();";
   const neededModules=["corpartes-ai-v1.js","corpartes-crm-v1.js","corpartes-os-v2.js",
     "corpartes-enterprise-v3.js","corpartes-manufacturing-v4.js",
-    "corpartes-crm-playbooks-v1.js","corpartes-operations-v5.js","corpartes-knowledge-v6.js"];
+    "corpartes-crm-playbooks-v1.js","corpartes-operations-v5.js","corpartes-knowledge-v6.js","corpartes-automations-v7.js"];
   async function getModules(){
     const rows=await Promise.all(neededModules.map(async function(name){
       const res=await fetch("/"+name,{cache:"no-store",credentials:"same-origin"});
@@ -127,13 +128,13 @@ button{padding:12px 15px;border:0;border-radius:9px;background:#165e92;color:#ff
     // El archivo arrastra scripts de feedback tras el cierre HTML; no incluirlos en la vista.
     const lastClose=html.lastIndexOf("</html>");
     if(lastClose!==-1)html=html.slice(0,lastClose+7);
-    const extra=["corpartes-crm-playbooks-v1.js","corpartes-operations-v5.js","corpartes-knowledge-v6.js"]
+    const extra=["corpartes-crm-playbooks-v1.js","corpartes-operations-v5.js","corpartes-knowledge-v6.js","corpartes-automations-v7.js"]
       .map(function(name){return inlineJs(modules[name]);}).join("\n");
     const handshake=inlineJs("(function(){window.addEventListener('message',function(e){"+
       "if(e.source!==window.parent||!e.data||e.data.kind!=='corpartes-demo-open')return;"+
-      "var id=String(e.data.module||'');if(!/^(control|atlas|mercadeo|logistica|fiscal|conocimiento|ai|crm|compras|contabilidad)$/.test(id))return;"+
+      "var id=String(e.data.module||'');if(!/^(control|atlas|mercadeo|logistica|fiscal|conocimiento|ai|crm|compras|contabilidad|automatizaciones)$/.test(id))return;"+
       "if(typeof openModule==='function')openModule(id);"+
-      "});document.addEventListener('DOMContentLoaded',function(){var ids=['control','atlas','mercadeo','logistica','fiscal','conocimiento','ai'];"+
+      "});document.addEventListener('DOMContentLoaded',function(){var ids=['control','atlas','mercadeo','logistica','fiscal','conocimiento','ai','automatizaciones'];"+
       "window.parent.postMessage({kind:'corpartes-demo-loaded',visible:ids.filter(function(k){return !!document.getElementById('module-'+k)})},'*');"+
       "});})();");
     const endBody=html.lastIndexOf("</body>");
@@ -149,8 +150,8 @@ button{padding:12px 15px;border:0;border-radius:9px;background:#165e92;color:#ff
   window.addEventListener("message",function(ev){
     if(ev.source!==frame.contentWindow||!ev.data||ev.data.kind!=="corpartes-demo-loaded")return;
     const found=ev.data.visible||[];
-    document.getElementById("demoModulesReady").textContent=found.length+" de 7 módulos de revisión cargados";
-    document.getElementById("demoModulesReady").style.color=found.length===7?"#138253":"#9b4c16";
+    document.getElementById("demoModulesReady").textContent=found.length+" de 8 módulos de revisión cargados";
+    document.getElementById("demoModulesReady").style.color=found.length===8?"#138253":"#9b4c16";
   });
   login.addEventListener("submit",async function(event){
     event.preventDefault();
