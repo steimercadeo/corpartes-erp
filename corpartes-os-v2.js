@@ -69,6 +69,11 @@ knowledgeScript.src="./corpartes-knowledge-v6.js";
 knowledgeScript.async=true;
 knowledgeScript.onerror=function(){console.error("CORPARTES V6: no fue posible cargar el centro de conocimiento.");};
 document.head.appendChild(knowledgeScript);
+var automationsScript=document.createElement("script");
+automationsScript.src="./corpartes-automations-v7.js";
+automationsScript.async=true;
+automationsScript.onerror=function(){console.error("CORPARTES V7: no fue posible cargar Automation Studio.");};
+document.head.appendChild(automationsScript);
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",mount,{once:true});else mount();
 })();
