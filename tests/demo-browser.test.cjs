@@ -34,8 +34,8 @@ test("DEMO muestra módulos y permite navegar a Atlas, aprendizajes y chat",asyn
  });
  const addr=server.address();const url="http://127.0.0.1:"+addr.port+"/demo.html";
  await page.goto(url,{waitUntil:"domcontentloaded"});
- await page.locator("#demoUser").fill("DEMO");
- await page.locator("#demoPassword").fill("Corpartes2026!");
+ await page.locator("#demoUser").fill("Nico123");
+ await page.locator("#demoPassword").fill("Nico123");
  await page.locator("#enter").click();
  await page.waitForFunction(()=>document.querySelector("#demoModulesReady")?.textContent?.includes("7 de 7"),null,{timeout:25000});
  assert.match(await page.locator("#demoModulesReady").textContent(),/7 de 7/);
