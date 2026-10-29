@@ -35,6 +35,9 @@ jobs:
           node --check corpartes-manufacturing-v4.js
           node --check corpartes-operations-v5.js
           node --check corpartes-knowledge-v6.js
+          node --check corpartes-automations-v7.js
+          node --check api/_shopify-intake.js
+          node --check api/shopify-webhook.js
       - name: Comprobar pantalla de demostración y HTML principal
         run: node --test tests/demo-preview.test.js
       - name: Pruebas de seguridad de autenticación
