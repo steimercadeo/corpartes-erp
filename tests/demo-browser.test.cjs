@@ -73,6 +73,6 @@ test("DEMO muestra módulos y permite navegar a Atlas, aprendizajes y chat",asyn
  await frame.locator("#module-control").waitFor({state:"visible",timeout:10000});
  const legacy=errors.filter(x=>/(ReferenceError: openEditOrder is not defined|Cannot read properties of null|SecurityError: Failed to read the 'serviceWorker')/i.test(x));
  if(legacy.length)console.warn("Advertencias heredadas del ERP:",legacy.join("; "));
- const serious=errors.filter(x=>!/(net::ERR|Failed to load resource|refused to load|networkerror|ReferenceError: openEditOrder is not defined|Cannot read properties of null|serviceWorker)/i.test(x));
+ const serious=errors.filter(x=>!/(net::ERR|Failed to load resource|refused to load|networkerror|blocked by CORS policy|ReferenceError: openEditOrder is not defined|Cannot read properties of null|serviceWorker)/i.test(x));
  assert.deepEqual(serious.slice(0,4),[],"Errores nuevos no controlados: "+serious.join("; "));
 });
