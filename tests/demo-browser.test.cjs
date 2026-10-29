@@ -37,7 +37,12 @@ test("DEMO muestra módulos y permite navegar a Atlas, aprendizajes y chat",asyn
  await page.locator("#demoUser").fill("Nico123");
  await page.locator("#demoPassword").fill("Nico123");
  await page.locator("#enter").click();
- await page.waitForFunction(()=>document.querySelector("#demoModulesReady")?.textContent?.includes("8 de 8"),null,{timeout:25000});
+ await page.waitForFunction(()=>document.querySelector("#demoModulesReady")?.textContent?.includes("8 de 8"),null,{timeout:10000}).catch(async function(){
+  const ready=await page.locator("#demoModulesReady").textContent().catch(()=>"<missing>");
+  const error=await page.locator("#err").textContent().catch(()=>"<missing>");
+  const count=await page.locator("#demoFrame").count();
+  throw new Error("DEMO load diagnostics: ready="+ready+" error="+error+" frame="+count+" console="+errors.join(" | "));
+ });
  assert.match(await page.locator("#demoModulesReady").textContent(),/8 de 8/);
  const frame=page.frameLocator("#demoFrame");
  await frame.locator("#module-control").waitFor({state:"visible",timeout:10000});
