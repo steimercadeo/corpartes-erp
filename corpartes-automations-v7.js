@@ -61,7 +61,7 @@ function approve(job){
 }
 function guide(job){
  if(!job||job.stage!=="aprobado"||!job.approval)throw Error("Falta la aprobación del despacho.");
- job.tracking="DEMO-CO-"+String(jobs.indexOf(job)+1).padStart(5,"0");
+ job.tracking="DEMO-CO-"+job.reference.slice(-3).padStart(5,"0");
  job.stage="guiado";record(job,"truck","Guía ficticia creada",job.tracking+" · "+job.carrier+". NO válida para transportar paquetes.");
  return job.tracking;
 }
