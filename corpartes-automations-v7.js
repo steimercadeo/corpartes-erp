@@ -128,7 +128,7 @@ function handleStep(step){
  if(step==="approve")approve(j);
  if(step==="guide")guide(j);
  if(step==="synchronize")synchronize(j);
- $("cp7ActionError").textContent="";
+
  }catch(err){alert(err.message||String(err));}
  render();
 }
