@@ -20,8 +20,8 @@ test("Los bloques JavaScript incrustados del ERP son sintácticamente válidos",
   assert.ok(count>30,"Se esperaban los scripts principales del ERP");
 });
 test("La demo no expone credenciales genéricas en el login real",()=>{
-  assert.match(demo,/const USER="DEMO",PASSWORD="Corpartes2026!"/);
-  assert.ok(!html.includes('const USER="DEMO",PASSWORD="Corpartes2026!"'));
+  assert.match(demo,/const USER="Nico123",PASSWORD="Nico123"/);
+  assert.ok(!html.includes('const USER="Nico123",PASSWORD="Nico123"'));
 });
 test("La demo está aislada de Firebase y del origen de datos reales",()=>{
   assert.match(demo,/sandbox="allow-scripts allow-forms allow-modals allow-downloads"/);
