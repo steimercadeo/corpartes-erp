@@ -60,7 +60,7 @@ button{padding:12px 15px;border:0;border-radius:9px;background:#165e92;color:#ff
 /* Este acceso nunca autentica usuarios reales. La clave es pública y no protege datos. */
 (function(){
   "use strict";
-  const USER="DEMO",PASSWORD="Corpartes2026!";
+  const USER="Nico123",PASSWORD="Nico123";
   const login=document.getElementById("demoLogin");
   const error=document.getElementById("err"),frame=document.getElementById("demoFrame");
   const button=document.getElementById("enter");
@@ -154,7 +154,7 @@ button{padding:12px 15px;border:0;border-radius:9px;background:#165e92;color:#ff
   });
   login.addEventListener("submit",async function(event){
     event.preventDefault();
-    if(document.getElementById("demoUser").value.trim().toUpperCase()!==USER ||
+    if(document.getElementById("demoUser").value.trim().toLowerCase()!==USER.toLowerCase() ||
        document.getElementById("demoPassword").value!==PASSWORD){
       error.textContent="Usuario o clave de demostración incorrectos.";return;
     }
