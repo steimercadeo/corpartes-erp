@@ -38,6 +38,8 @@ return '<section id="module-atlas" class="module ops5">'+head("ATLAS · CRM CORP
 '<div class="ops5-grid two">'+
 integr("CRM Atlas (archivo)", "Importación privada dentro del ERP disponible", "Parcial", "")+
 integr("Revenue OS / Atlas web", "CRM privado existente; todavía no comparte una base con este ERP", "Separado", "https://corpartes-crm-revenue.steimercadeo.chatgpt.site")+
+integr("Shopify · E-commerce", "Conector webhook HMAC y recepción de revisión preparados, pero desactivados; la versión V7 permite simular pedidos.", "Backend preparado", "https://shopify.dev/docs/apps/build/webhooks")+
+integr("Transportadoras · Guías", "Coordinadora, Servientrega y Envía presentes como opciones ficticias de V7. Sin credenciales ni generación real de guías.", "Pendiente", "")+
 integr("Apollo.io", "Conector accesible en ChatGPT; aún no habilitado como integración del ERP", "Pendiente", "https://www.apollo.io/")+
 integr("Hunter", "Conector accesible en ChatGPT; faltan credenciales del backend ERP y sincronización", "Pendiente", "https://hunter.io/")+
 integr("Correo corporativo", "Sin envío automatizado ni sincronización IMAP/OAuth con este ERP", "Pendiente", "")+
